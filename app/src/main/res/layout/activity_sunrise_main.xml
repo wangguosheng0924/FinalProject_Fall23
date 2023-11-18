@@ -11,12 +11,43 @@
         android:id="@+id/recyclerViewResults"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="1.0" />
 
+    <!-- EditText for entering latitude -->
+    <EditText
+        android:id="@+id/editTextLatitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="556dp"
+        android:hint="Please enter Latitude here"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- EditText for entering longitude -->
+    <EditText
+        android:id="@+id/editTextLongitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLatitude"
+        android:hint="Please enter Longitude here"
+        app:layout_constraintStart_toStartOf="@+id/editTextLatitude"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLatitude" />
 
+    <!-- Button to trigger the lookup -->
+    <Button
+        android:id="@+id/buttonLookup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLongitude"
+        android:text="Lookup"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextLongitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextLongitude" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

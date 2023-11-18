@@ -50,7 +50,7 @@ public class SunriseMain extends AppCompatActivity {
 
         // Show a Snackbar
         Snackbar.make(binding.getRoot(), "You deleted the row", Snackbar.LENGTH_LONG)
-                .show();
+                  .show();
 
         // Show a AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(SunriseMain.this);
@@ -58,7 +58,17 @@ public class SunriseMain extends AppCompatActivity {
         builder.setMessage("Do you want to delete the message?");
         builder.setNegativeButton("No", (btn, obj) -> {/*if no is clicked*/});
         builder.setPositiveButton("Yes", (p1, p2) -> {
+// code here
+
         });
         builder.create().show();
-    }
+
+
+        // Click handler for the buttonLookup
+        binding.buttonLookup.setOnClickListener(click ->{
+            String newLatitude = binding.editTextLatitude.getText().toString();
+            String newLongitude = binding.editTextLongitude.getText().toString();
+// code here
+        });
+    };
 }
