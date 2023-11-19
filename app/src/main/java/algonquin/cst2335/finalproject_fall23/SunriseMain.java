@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -64,11 +66,33 @@ public class SunriseMain extends AppCompatActivity {
         builder.create().show();
 
 
+        SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+
         // Click handler for the buttonLookup
         binding.buttonLookup.setOnClickListener(click ->{
             String newLatitude = binding.editTextLatitude.getText().toString();
             String newLongitude = binding.editTextLongitude.getText().toString();
+
+            // Save the entered Latitude and Longitude to disk (SharedPreferences)
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("Latitude", binding.editTextLatitude.getText().toString());
+            editor.putString("Longitude", binding.editTextLongitude.getText().toString());
+            editor.apply();//send to disk
 // code here
         });
+
+        // Load the last entered Latitude and Longitude from SharedPreferences
+        String lastEnteredLatitude = prefs.getString("Latitude", "");
+        binding.editTextLatitude.setText(lastEnteredLatitude);
+        String lastEnteredLongitude = prefs.getString("Longitude", "");
+        binding.editTextLongitude.setText(lastEnteredLongitude);
+
+
+        // Handle the backToMainActivityButton click
+        binding.backToMainActivityButton.setOnClickListener(click -> {
+            // to go back:
+            finish();
+        });
+
     };
 }
