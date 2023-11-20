@@ -2,6 +2,7 @@ package algonquin.cst2335.finalproject_fall23;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,21 +19,34 @@ import algonquin.cst2335.finalproject_fall23.databinding.SongListBinding;
 public class ArtistsSearch extends AppCompatActivity {
 
     ActivityArtistsSearchBinding binding;
-    ArrayList<String> artistSongs = new ArrayList<>();
+    ArrayList<SongInfo> artistSongs =null;
 
-    private RecyclerView.Adapter myAdapter;
+    RecyclerView.Adapter myAdapter;
+
+    SongViewModel songModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding=ActivityArtistsSearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        songModel = new ViewModelProvider(this).get(SongViewModel.class);
+        artistSongs = songModel.artistSongs;
+
+
+
+
         binding.searchButton.setOnClickListener(click ->{
-            artistSongs.add(binding.textInput.getText().toString());
+            String userInput =binding.textInput.getText().toString();
             myAdapter.notifyItemChanged(artistSongs.size()-1);
 
+
+
+            SongInfo si= new SongInfo(userInput,"duration", "album_name",
+                    "album_cover");
+            artistSongs.add(si);
             binding.textInput.setText("");
+            myAdapter.notifyDataSetChanged();//will redraw
         });
 
         binding.songList.setAdapter(myAdapter=
@@ -48,11 +62,13 @@ public class ArtistsSearch extends AppCompatActivity {
 
             @Override
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                holder.songName.setText("");
-                holder.albumName.setText("");
-                holder.year.setText("");
-                String obj = artistSongs.get(position);
-                holder.songName.setText(obj);
+                String obj1 = artistSongs.get(position).title;
+
+
+                holder.songName.setText(obj1);
+                holder.albumName.setText(artistSongs.get(position).duration);
+                holder.year.setText(artistSongs.get(position).album_name);
+
                 /*need to set album and year as well */
             }
 
