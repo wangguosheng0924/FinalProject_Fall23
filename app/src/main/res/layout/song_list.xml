@@ -6,32 +6,90 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/songName"
-        android:layout_width="347dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/songName3"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="256dp"
         android:text="Song goes here"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/songName2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/albumName"
-        android:layout_width="195dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:text="Album goes here"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songName" />
+        android:id="@+id/songName7"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="532dp"
+        android:text="Song goes here"
+        app:layout_constraintStart_toStartOf="@+id/songName8"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/year"
-        android:layout_width="115dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="56dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/albumName"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:id="@+id/songName2"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="312dp"
+        android:text="Song goes here"
+        app:layout_constraintStart_toStartOf="@+id/songName4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/songName"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="200dp"
+        android:text="Song goes here"
+
+        app:layout_constraintStart_toStartOf="@+id/songName2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/artistName"
+        android:layout_width="307dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:text="Artist name goes here"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/songName"
+        app:layout_constraintStart_toStartOf="@+id/songName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.883" />
+
+    <TextView
+        android:id="@+id/songName4"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="368dp"
+        android:text="Song goes here"
+        app:layout_constraintStart_toStartOf="@+id/songName5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/songName5"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="424dp"
+        android:text="Song goes here"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="27dp" />
+
+    <TextView
+        android:id="@+id/songName6"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="484dp"
+        android:text="Song goes here"
+        app:layout_constraintStart_toStartOf="@+id/songName5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/songName8"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="592dp"
+        android:text="Song goes here"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.252"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

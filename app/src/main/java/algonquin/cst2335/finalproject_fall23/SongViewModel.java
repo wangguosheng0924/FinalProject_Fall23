@@ -6,6 +6,6 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 public class SongViewModel extends ViewModel {
-    public    ArrayList<SongInfo> artistSongs = new java.util.ArrayList<>();
-    public MutableLiveData<SongInfo> selectedMessage = new MutableLiveData< >();
+    public    ArrayList<SongList> artistSongs = new java.util.ArrayList<>();
+    public MutableLiveData<SongList> selectedMessage = new MutableLiveData< >();
 }
