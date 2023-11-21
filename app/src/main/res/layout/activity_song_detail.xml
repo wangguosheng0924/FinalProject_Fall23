@@ -22,6 +22,7 @@
         android:layout_width="296dp"
         android:layout_height="47dp"
         android:text="song Title"
+        android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/artistName"
         app:layout_constraintStart_toStartOf="@+id/albumCover"
         app:layout_constraintTop_toBottomOf="@+id/albumCover"
@@ -31,6 +32,7 @@
         android:id="@+id/artistName"
         android:layout_width="293dp"
         android:layout_height="49dp"
+       android:textSize="15sp"
         android:layout_marginBottom="8dp"
         android:text="artist name"
         app:layout_constraintBottom_toTopOf="@+id/duration"
@@ -65,8 +67,24 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumCover"
 
-        app:layout_constraintVertical_bias="0.615" />
+        app:layout_constraintTop_toBottomOf="@+id/albumCover"
+        app:layout_constraintVertical_bias="0.465" />
+
+    <Button
+        android:id="@+id/historyButton"
+        android:layout_width="151dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="356dp"
+        android:text="check collection"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.834"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/albumCover"
+        app:layout_constraintVertical_bias="0.465" />
 </androidx.constraintlayout.widget.ConstraintLayout>

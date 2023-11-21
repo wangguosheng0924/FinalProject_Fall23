@@ -41,8 +41,9 @@ public class ArtistsSearch extends AppCompatActivity {
             myAdapter.notifyItemChanged(artistSongs.size() - 1);
 
 
-            SongList si = new SongList(userInput, new ArrayList<>());
-            artistSongs.add(si);
+            SongList sl = new SongList(userInput, "String b","String c",
+                    "String d","String e");
+            artistSongs.add(sl);
             binding.textInput.setText("");
             myAdapter.notifyDataSetChanged();//will redraw
         });
@@ -77,10 +78,10 @@ public class ArtistsSearch extends AppCompatActivity {
                                 String clickedText = view.getTag().toString();
 
                                 Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
-                                intent.putExtra("artistName",
-                                        "From artist: "+song.artist);
-                                intent.putExtra("songTitle",
-                                        "You chose the song: "+clickedText);
+                                intent.putExtra("artistName", song.artist);
+                                intent.putExtra("songTitle", clickedText);
+
+                                intent.putExtra("albumCover", "app_icon");
                                 startActivity(intent);
                             }
                         };
