@@ -3,12 +3,15 @@ package algonquin.cst2335.finalproject_fall23;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,6 +94,39 @@ public class SongDetail extends AppCompatActivity {
 
         }
 
+        binding.deleteButton.setOnClickListener(click -> {
+            String songTitleToDelete = songTitle.getText().toString();
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(SongDetail.this);
+
+            builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
+            builder.setMessage("Do you want to delete this song?");
+            builder.setTitle("Delete");
+
+
+            builder.setPositiveButton("yes", (p1, p2) -> {
+//                    //add to database on another thread
+                Executor thread = Executors.newSingleThreadExecutor();
+                /*this runs in another thread*/
+                thread.execute(() -> {
+                    for (SongList song : songCollect) {
+                        if (song.songTitle.equals(songTitleToDelete)) {
+                            sDAO.deleteMessage(song);
+                            break; // Exit loop after finding and deleting the song
+                        }
+                    }
+                    runOnUiThread(() -> {
+                Intent returnIntent = new Intent(SongDetail.this, CollectionList.class);
+                startActivity(returnIntent);
+                finish(); // Close the current activity
+
+                    });
+                });
+            });
+                builder.create().show(); //this has to be last
+
+            });
+//
 
         binding.saveButton.setOnClickListener(click -> {
 

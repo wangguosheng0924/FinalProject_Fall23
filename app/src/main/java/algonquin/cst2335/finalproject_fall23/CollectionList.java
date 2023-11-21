@@ -1,5 +1,6 @@
 package algonquin.cst2335.finalproject_fall23;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
 
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -29,6 +32,8 @@ public class CollectionList extends AppCompatActivity {
     SongListDAO sDAO;
     ActivityCollectionListBinding binding;
     ArrayList<SongList> songCollect;
+
+    int selectedRow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +61,6 @@ public class CollectionList extends AppCompatActivity {
                     }
 
 
-
                     @Override
                     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                         SongList song = songCollect.get(position);
@@ -80,7 +84,49 @@ public class CollectionList extends AppCompatActivity {
 
         binding.songRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+//        binding.deleteButton.setOnClickListener(click -> {
+//
+//            SongList selected = songCollect.get( selectedRow);
+//            AlertDialog.Builder builder =
+//                    new AlertDialog.Builder(CollectionList.this);
+//
+//            builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
+//            builder.setMessage("Do you want to delete this song?");
+//            builder.setTitle("Delete");
+//
+//
+//            builder.setPositiveButton("yes", (p1, p2) -> {
+////                    //add to database on another thread
+//                Executor thread = Executors.newSingleThreadExecutor();
+//                /*this runs in another thread*/
+//                thread.execute(() -> {
+//                    sDAO.deleteMessage(selected);//get the id from
+////                    });
+//                    songCollect.remove(selectedRow);//remove from the array list
+//                    myAdapter.notifyDataSetChanged();//redraw the list
+////
+//
+//                    Snackbar.make(binding.deleteButton, "You deleted the row", Snackbar.LENGTH_LONG)
+//                            .setAction("Undo", (btn) -> {
+//                                Executor thread2 = Executors.newSingleThreadExecutor();
+//                                thread2.execute(() -> {
+//                                    sDAO.insertMessage(selected);
+//                                });
+////
+////
+//                                songCollect.add(selectedRow, selected);
+//                                myAdapter.notifyDataSetChanged();//redraw the list
+//                            })
+//                            .show();
+//
+//                });
+//                builder.create().show(); //this has to be last
+//
+//            });
+//        });
     }
+
+    ;
 
     private void initializeDatabaseAndLoadData() {
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
@@ -108,7 +154,7 @@ public class CollectionList extends AppCompatActivity {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView songTitle   , artistName, duration, albumName; // and other
+        TextView songTitle, artistName, duration, albumName; // and other
         // TextViews
 
         public ViewHolder(View view) {
@@ -122,6 +168,7 @@ public class CollectionList extends AppCompatActivity {
                 int position = getAbsoluteAdapterPosition();//which row this is
 
                 if (position != RecyclerView.NO_POSITION) {
+                    selectedRow = position;
                     SongList selectedSong = songCollect.get(position);
                     Intent intent = new Intent(CollectionList.this, SongDetail.class);
                     intent.putExtra("SONG_TITLE", selectedSong.songTitle);

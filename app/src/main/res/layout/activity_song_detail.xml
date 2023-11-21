@@ -60,8 +60,8 @@
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="151dp"
-        android:layout_height="59dp"
+        android:layout_width="107dp"
+        android:layout_height="51dp"
         android:layout_marginTop="356dp"
         android:text="Save"
         android:textSize="20sp"
@@ -74,17 +74,30 @@
         app:layout_constraintVertical_bias="0.465" />
 
     <Button
-        android:id="@+id/historyButton"
-        android:layout_width="151dp"
-        android:layout_height="59dp"
+        android:id="@+id/deleteButton"
+        android:layout_width="107dp"
+        android:layout_height="51dp"
         android:layout_marginTop="356dp"
+        android:text="Delete"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.786"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/albumCover"
+        app:layout_constraintVertical_bias="0.469" />
+
+    <Button
+        android:id="@+id/historyButton"
+        android:layout_width="216dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="644dp"
         android:text="check collection"
+        android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.834"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/albumCover"
-        app:layout_constraintVertical_bias="0.465" />
+        app:layout_constraintHorizontal_bias="0.43"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
