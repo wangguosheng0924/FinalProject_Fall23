@@ -9,10 +9,9 @@
         android:id="@+id/albumCover"
         android:layout_width="267dp"
         android:layout_height="141dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="136dp"
         android:contentDescription="TODO"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.548"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/app_icon" />
@@ -98,7 +97,7 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/albumCover"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.574"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -106,8 +105,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="mark collection name here"
         android:inputType="text"
-        android:hint= "mark collection name here"
-        tools:layout_editor_absoluteX="96dp"
-        tools:layout_editor_absoluteY="559dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="570dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
