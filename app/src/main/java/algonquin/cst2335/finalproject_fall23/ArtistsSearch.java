@@ -72,18 +72,15 @@ public class ArtistsSearch extends AppCompatActivity {
                         holder.songName7.setTag("Song 7");
                         holder.songName8.setTag("Song 8");
 
-                        View.OnClickListener clickListener = new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                String clickedText = view.getTag().toString();
+                        View.OnClickListener clickListener = view -> {
+                            String clickedText = view.getTag().toString();
 
-                                Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
-                                intent.putExtra("artistName", song.artist);
-                                intent.putExtra("songTitle", clickedText);
+                            Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
+                            intent.putExtra("artistName", song.artist);
+                            intent.putExtra("songTitle", clickedText);
 
-                                intent.putExtra("albumCover", "app_icon");
-                                startActivity(intent);
-                            }
+                            intent.putExtra("albumCover", "app_icon");
+                            startActivity(intent);
                         };
 
                         holder.artistName.setOnClickListener(clickListener);

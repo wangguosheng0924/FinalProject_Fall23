@@ -51,6 +51,13 @@ public class SongDetail extends AppCompatActivity {
         albumName= findViewById(R.id.albumName);
         duration= findViewById(R.id.duration);
         saveButton=findViewById(R.id.saveButton);
+
+        Intent intent = getIntent();
+        songTitle.setText(intent.getStringExtra("SONG_TITLE"));
+        artistName.setText(intent.getStringExtra("ARTIST_NAME"));
+        duration.setText(intent.getStringExtra("DURATION"));
+        albumName.setText(intent.getStringExtra("ALBUM_NAME"));
+
         //load messages from the database:
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
                         PersonalSongListData.class,
@@ -112,9 +119,9 @@ public class SongDetail extends AppCompatActivity {
         binding.historyButton.setOnClickListener(click -> {
 
 
-            Intent intent = new Intent(SongDetail.this, CollectionList.class);
+            Intent intent2 = new Intent(SongDetail.this, CollectionList.class);
 
-            startActivity(intent);
+            startActivity(intent2);
 
 
 

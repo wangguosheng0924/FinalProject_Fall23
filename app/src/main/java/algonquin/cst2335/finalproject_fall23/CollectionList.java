@@ -1,5 +1,6 @@
 package algonquin.cst2335.finalproject_fall23;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -117,6 +118,20 @@ public class CollectionList extends AppCompatActivity {
             duration = view.findViewById(R.id.duration);
             albumName = view.findViewById(R.id.albumName);
 
+            view.setOnClickListener(click -> {
+                int position = getAbsoluteAdapterPosition();//which row this is
+
+                if (position != RecyclerView.NO_POSITION) {
+                    SongList selectedSong = songCollect.get(position);
+                    Intent intent = new Intent(CollectionList.this, SongDetail.class);
+                    intent.putExtra("SONG_TITLE", selectedSong.songTitle);
+                    intent.putExtra("ARTIST_NAME", selectedSong.artist);
+                    intent.putExtra("DURATION", selectedSong.duration);
+                    intent.putExtra("ALBUM_NAME", selectedSong.albumName);
+                    startActivity(intent);
+                }
+
+            });
         }
     }
 
