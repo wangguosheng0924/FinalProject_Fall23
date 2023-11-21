@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -41,6 +42,7 @@ public class CollectionList extends AppCompatActivity {
         songCollect = new ArrayList<>();
         binding = ActivityCollectionListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Toast.makeText(this, "Scroll down to see more songs", Toast.LENGTH_LONG).show();
 
         myAdapter =
                 new RecyclerView.Adapter<ViewHolder>() {
@@ -170,13 +172,17 @@ public class CollectionList extends AppCompatActivity {
                 if (position != RecyclerView.NO_POSITION) {
                     selectedRow = position;
                     SongList selectedSong = songCollect.get(position);
-                    Intent intent = new Intent(CollectionList.this, SongDetail.class);
-                    intent.putExtra("SONG_TITLE", selectedSong.songTitle);
-                    intent.putExtra("ARTIST_NAME", selectedSong.artist);
-                    intent.putExtra("DURATION", selectedSong.duration);
-                    intent.putExtra("ALBUM_NAME", selectedSong.albumName);
-                    startActivity(intent);
-                }
+
+                                // Action to show details
+                                Intent intent = new Intent(CollectionList.this, SongDetail.class);
+                                intent.putExtra("SONG_TITLE", selectedSong.songTitle);
+                                intent.putExtra("ARTIST_NAME", selectedSong.artist);
+                                intent.putExtra("DURATION", selectedSong.duration);
+                                intent.putExtra("ALBUM_NAME", selectedSong.albumName);
+                                startActivity(intent);
+                            }
+
+
 
             });
         }

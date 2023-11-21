@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -150,6 +151,9 @@ public class SongDetail extends AppCompatActivity {
                 // insert SongList into the database
 
             });
+
+            Toast.makeText(SongDetail.this, "Song saved!",
+                    Toast.LENGTH_SHORT).show();
         });
 
         binding.historyButton.setOnClickListener(click -> {

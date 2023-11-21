@@ -34,23 +34,31 @@ public class ArtistsSearch extends AppCompatActivity {
         binding = ActivityArtistsSearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        songModel = new ViewModelProvider(this).get(SongViewModel.class);
-        artistSongs = songModel.artistSongs;
 
         SharedPreferences prefs = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
         String lastSearch = prefs.getString("lastSearch", "");
+
         binding.textInput.setText(lastSearch);
+
+        songModel = new ViewModelProvider(this).get(SongViewModel.class);
+        artistSongs = songModel.artistSongs;
+
+
 
         binding.searchButton.setOnClickListener(click -> {
             String userInput = binding.textInput.getText().toString();
-            myAdapter.notifyItemChanged(artistSongs.size() - 1);
+
+            SharedPreferences pref = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("lastSearch", userInput);
+            editor.apply();
 
 
             SongList sl = new SongList(userInput, "String b","String c",
                     "String d","String e");
             artistSongs.add(sl);
-            binding.textInput.setText("");
-            myAdapter.notifyDataSetChanged();//will redraw
+
+
         });
 
         binding.songList.setAdapter(myAdapter =
@@ -85,10 +93,7 @@ public class ArtistsSearch extends AppCompatActivity {
                                     " are interested in now:)",
                                     Toast.LENGTH_SHORT).show();
 
-                            SharedPreferences prefs = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("lastSearch", clickedText);
-                            editor.apply();
+
 
 
                             Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
