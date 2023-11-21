@@ -3,6 +3,7 @@ package algonquin.cst2335.finalproject_fall23;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -110,27 +111,33 @@ public class SongDetail extends AppCompatActivity {
 
         binding.historyButton.setOnClickListener(click -> {
 
+
+            Intent intent = new Intent(SongDetail.this, CollectionList.class);
+
+            startActivity(intent);
+
+
+
             // Assuming you have artistName and songTitle TextViews
 
-            String artistN = artistName.getText().toString();
-            String song = songTitle.getText().toString();
-            String aN = albumName.getText().toString();
-            String du = duration.getText().toString();
-
-
-            // Create a SongList object
-            SongList thisSong = new SongList(artistN, song, albumCoverName, du, aN);
-
-            songCollect.add(thisSong);
-            // Database insertion on a background thread
-            Executor  thread3 = Executors.newSingleThreadExecutor();
-            thread3.execute(() -> {
-
-                thisSong.Id = sDAO.insertMessage(thisSong); // Method to
-                // insert SongList into the database
+//            String artistN = artistName.getText().toString();
+//            String song = songTitle.getText().toString();
+//            String aN = albumName.getText().toString();
+//            String du = duration.getText().toString();
+//
+//
+//            // Create a SongList object
+//            SongList thisSong = new SongList(artistN, song, albumCoverName, du, aN);
+//
+//            songCollect.add(thisSong);
+//            // Database insertion on a background thread
+//            Executor  thread3 = Executors.newSingleThreadExecutor();
+//            thread3.execute(() -> {
+//
+//                thisSong.Id = sDAO.insertMessage(thisSong); // Method to
+//                // insert SongList into the database
 
             });
-        });
+        };
 
     }
-}
