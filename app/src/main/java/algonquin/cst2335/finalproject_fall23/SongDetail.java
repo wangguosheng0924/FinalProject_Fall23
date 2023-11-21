@@ -118,24 +118,6 @@ public class SongDetail extends AppCompatActivity {
 
 
 
-            // Assuming you have artistName and songTitle TextViews
-
-//            String artistN = artistName.getText().toString();
-//            String song = songTitle.getText().toString();
-//            String aN = albumName.getText().toString();
-//            String du = duration.getText().toString();
-//
-//
-//            // Create a SongList object
-//            SongList thisSong = new SongList(artistN, song, albumCoverName, du, aN);
-//
-//            songCollect.add(thisSong);
-//            // Database insertion on a background thread
-//            Executor  thread3 = Executors.newSingleThreadExecutor();
-//            thread3.execute(() -> {
-//
-//                thisSong.Id = sDAO.insertMessage(thisSong); // Method to
-//                // insert SongList into the database
 
             });
         };
