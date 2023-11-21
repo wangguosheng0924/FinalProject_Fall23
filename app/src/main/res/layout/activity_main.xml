@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Dictionary search"
+        android:onClick="onDictionaryButtonClick"
         app:layout_constraintStart_toStartOf="@+id/sunriseButton"
         app:layout_constraintTop_toBottomOf="@+id/sunriseButton" />
 
