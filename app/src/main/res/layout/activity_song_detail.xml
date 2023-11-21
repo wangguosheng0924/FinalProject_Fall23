@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/albumCover"
+        android:layout_width="267dp"
+        android:layout_height="141dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.198"
+        app:srcCompat="@drawable/app_icon"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/songTitle"
+        android:layout_width="296dp"
+        android:layout_height="47dp"
+        android:text="song Title"
+        app:layout_constraintBottom_toTopOf="@+id/artistName"
+        app:layout_constraintStart_toStartOf="@+id/albumCover"
+        app:layout_constraintTop_toBottomOf="@+id/albumCover"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/artistName"
+        android:layout_width="293dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="8dp"
+        android:text="artist name"
+        app:layout_constraintBottom_toTopOf="@+id/duration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintStart_toStartOf="@+id/songTitle" />
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="288dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="28dp"
+        android:text="duration"
+        app:layout_constraintBottom_toTopOf="@+id/albumName"
+        app:layout_constraintStart_toStartOf="@+id/artistName" />
+
+    <TextView
+        android:id="@+id/albumName"
+        android:layout_width="291dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="200dp"
+        android:text="album Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/duration" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="151dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="356dp"
+        android:text="Save"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/albumCover"
+
+        app:layout_constraintVertical_bias="0.615" />
+</androidx.constraintlayout.widget.ConstraintLayout>

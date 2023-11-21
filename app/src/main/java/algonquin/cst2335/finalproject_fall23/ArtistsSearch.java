@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,17 +60,40 @@ public class ArtistsSearch extends AppCompatActivity {
 
                     @Override
                     public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                        String obj1 = artistSongs.get(position).artist;
-                        holder.artistName.setText(obj1);
-                        holder.songName.setText("Song 1");
-                        holder.songName2.setText("Song 2");
-                        holder.songName3.setText("Song 3");
-                        holder.songName4.setText("Song 4");
-                        holder.songName5.setText("Song 5");
-                        holder.songName6.setText("Song 6");
-                        holder.songName7.setText("Song 7");
-                        holder.songName8.setText("Song 8");
+                        SongList song = artistSongs.get(position);
+                        holder.artistName.setTag("Here is the song list for "+song.artist);
+                        holder.songName.setTag("Song 1");
+                        holder.songName2.setTag("Song 2");
+                        holder.songName3.setTag("Song 3");
+                        holder.songName4.setTag("Song 4");
+                        holder.songName5.setTag("Song 5");
+                        holder.songName6.setTag("Song 6");
+                        holder.songName7.setTag("Song 7");
+                        holder.songName8.setTag("Song 8");
 
+                        View.OnClickListener clickListener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String clickedText = view.getTag().toString();
+
+                                Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
+                                intent.putExtra("artistName",
+                                        "From artist: "+song.artist);
+                                intent.putExtra("songTitle",
+                                        "You chose the song: "+clickedText);
+                                startActivity(intent);
+                            }
+                        };
+
+                        holder.artistName.setOnClickListener(clickListener);
+                        holder.songName.setOnClickListener(clickListener);
+                        holder.songName2.setOnClickListener(clickListener);
+                        holder.songName3.setOnClickListener(clickListener);
+                        holder.songName4.setOnClickListener(clickListener);
+                        holder.songName5.setOnClickListener(clickListener);
+                        holder.songName6.setOnClickListener(clickListener);
+                        holder.songName7.setOnClickListener(clickListener);
+                        holder.songName8.setOnClickListener(clickListener);
 
 
                     }
