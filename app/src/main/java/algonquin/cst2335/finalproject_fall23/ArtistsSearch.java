@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,9 @@ public class ArtistsSearch extends AppCompatActivity {
         songModel = new ViewModelProvider(this).get(SongViewModel.class);
         artistSongs = songModel.artistSongs;
 
+        SharedPreferences prefs = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
+        String lastSearch = prefs.getString("lastSearch", "");
+        binding.textInput.setText(lastSearch);
 
         binding.searchButton.setOnClickListener(click -> {
             String userInput = binding.textInput.getText().toString();
@@ -74,6 +79,17 @@ public class ArtistsSearch extends AppCompatActivity {
 
                         View.OnClickListener clickListener = view -> {
                             String clickedText = view.getTag().toString();
+
+                            // Show a Toast message
+                            Toast.makeText(ArtistsSearch.this, "I see who you" +
+                                    " are interested in now:)",
+                                    Toast.LENGTH_SHORT).show();
+
+                            SharedPreferences prefs = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("lastSearch", clickedText);
+                            editor.apply();
+
 
                             Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
                             intent.putExtra("artistName", song.artist);
