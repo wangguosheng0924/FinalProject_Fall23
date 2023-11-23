@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 public class DefinitionViewModel extends ViewModel {
-    public MutableLiveData<ArrayList<Definition>> definitions = new MutableLiveData<>();
+    public MutableLiveData<ArrayList<String>> definitions = new MutableLiveData<>();
+public MutableLiveData<String> selectedDefinition= new MutableLiveData<>();
 
 }
