@@ -21,5 +21,10 @@ public class MainActivity extends AppCompatActivity {
         binding.sunriseButton.setOnClickListener( click -> {
             startActivity(new Intent(this,SunriseMain.class));
         });
+
+        binding.recipeButton.setOnClickListener( click -> {
+            startActivity(new Intent(this,RecipeMain.class));
+        });
+
     }
 }
