@@ -3,27 +3,51 @@ package algonquin.cst2335.finalproject_fall23;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import algonquin.cst2335.finalproject_fall23.data.LocationViewModel;
 import algonquin.cst2335.finalproject_fall23.databinding.ActivitySunriseMainBinding;
+import algonquin.cst2335.finalproject_fall23.databinding.DetailsLayoutBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.LocationBinding;
 
 public class SunriseMain extends AppCompatActivity {
@@ -34,6 +58,8 @@ public class SunriseMain extends AppCompatActivity {
     LocationViewModel locationModel;
     ArrayList<Location> theLocation = null;
     RecyclerView.Adapter myAdapter = null;
+    RequestQueue queue = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +67,10 @@ public class SunriseMain extends AppCompatActivity {
 
         binding = ActivitySunriseMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //This part goes at the top of the onCreate function:
+        // Initialize the RequestQueue using Volley
+        queue = Volley.newRequestQueue(this);
 
         // Get an instance of the LocationViewModel using the ViewModelProvider.
         locationModel = new ViewModelProvider(this).get(LocationViewModel.class);
@@ -54,11 +84,14 @@ public class SunriseMain extends AppCompatActivity {
         //initialize the variable
         lDAO = db.lDAO();//get a DAO object to interact with the database
 
+        // Set up the toolbar(call onCreateOptionsMenu)
+        setSupportActionBar(binding.myToolbar);//only one line required to initialize toolbar
+
 
         // Set up RecyclerView and Adapter
         binding.recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewResults.setAdapter(
-             myAdapter = new RecyclerView.Adapter<MyRowHolder>(){
+        myAdapter = new RecyclerView.Adapter<MyRowHolder>(){
             @NonNull
             @Override
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,10 +101,10 @@ public class SunriseMain extends AppCompatActivity {
 
                  @Override
                  public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                     MyRowHolder myRowHolder = (MyRowHolder) holder;
+
                      Location location = theLocation.get(position);
-                     myRowHolder.latitude.setText(location.getLatitude());
-                     myRowHolder.longitude.setText(location.getLongitude());
+                     holder.latitude.setText(location.getLatitude());
+                     holder.longitude.setText(location.getLongitude());
                  }
 
             @Override
@@ -110,10 +143,62 @@ public class SunriseMain extends AppCompatActivity {
             editor.putString("Longitude", binding.editTextLongitude.getText().toString());
             editor.apply();//send to disk
 
-            String newLatitude = binding.editTextLatitude.getText().toString();
-            String newLongitude = binding.editTextLongitude.getText().toString();
-// code here
+            try{
+            String newLatitude = URLEncoder.encode(binding.editTextLatitude.getText().toString());
+            String newLongitude = URLEncoder.encode(binding.editTextLongitude.getText().toString());
+
+            String url = "http://api.sunrisesunset.io/json?lat=" + newLatitude + "&lng=" + newLongitude + "&timezone=CA&date=today";
+
+            // Create a JsonObjectRequest to fetch weather information
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+
+                    // Successful response callback
+                    (response) ->{
+
+                        try {
+                            // Extract weather information from the JSON response
+                            JSONObject mainObject = response.getJSONObject( "results" );
+                            String timeSunrise = mainObject.getString("sunrise");
+                            String timeSunset = mainObject.getString("sunset");
+                            String timeFirstLight = mainObject.getString("first_light");
+                            String timeLastLight = mainObject.getString("last_light");
+                            String timeDawn = mainObject.getString("dawn");
+                            String timeDusk = mainObject.getString("dusk");
+                            String timeSolarNoon = mainObject.getString("solar_noon");
+                            String timeGoldenHour = mainObject.getString("golden_hour");
+                            String dayLength = mainObject.getString("day_length");
+                            Log.d("API_RESPONSE", response.toString());
+
+                            // Create a new fragment for message details
+                            SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
+
+                            // Pass the sunrise details to the fragment
+                           sunriseDetailsFragment.updateSunriseDetails(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
+                                    timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
+
+                            //to load fragments:
+                            FragmentManager fMgr = getSupportFragmentManager();
+                            FragmentTransaction tx = fMgr.beginTransaction();
+                            tx.replace(R.id.fragmentLocation, sunriseDetailsFragment);
+                            tx.commit();
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    },
+                    (error) ->{  error.printStackTrace();}
+            );
+                Log.d("SunriseMain", "Before network request");
+            queue.add(request); // fetches from the server
+                Log.d("SunriseMain", "After network request");
+
+        } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
+// code here
+
 
         // Load the last entered Latitude and Longitude from SharedPreferences
         String lastEnteredLatitude = prefs.getString("Latitude", "");
@@ -148,7 +233,7 @@ public class SunriseMain extends AppCompatActivity {
             // Fetch favorite locations from the database on another thread
             Executor thread1 = Executors.newSingleThreadExecutor();
             thread1.execute(() -> {
-                // This is on a background thread
+
                 ArrayList<Location> favoriteLocations = (ArrayList<Location>) lDAO.getAllLocations();
 
                 // Update the UI on the main thread
@@ -170,8 +255,80 @@ public class SunriseMain extends AppCompatActivity {
         });
 
     }
+    // Override method for creating the options menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        //inflate a menu into the toolbar
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return true;
+    }
+    @SuppressLint("NonConstantResourceId")
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-    ;
+            int itemId = item.getItemId();
+
+            if(itemId == R.id.detailsLocation) {
+
+            }
+
+            if (itemId == R.id.deleteLocation) {
+                // Put your ChatMessage deletion code here.
+                // If you select this item, you should show the alert dialog
+                // asking if the user wants to delete this message.
+
+                if (selectedLocation != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SunriseMain.this);
+
+                    builder.setTitle("Delete");
+                    builder.setMessage("Do you want to delete the message?");
+
+                    builder.setNegativeButton("No", (btn, obj) -> {/*if no is clicked*/});
+                    builder.setPositiveButton("Yes", (p1, p2) -> {
+
+                        // Store the index before deleting
+                        int deletedMessagePosition = theLocation.indexOf(selectedLocation);
+
+                        Executor thread = Executors.newSingleThreadExecutor();
+                        thread.execute(() -> {
+                            // delete from database
+                            lDAO.deleteLocation(selectedLocation);
+                        });
+                        theLocation.remove(selectedLocation); // remove from the array list
+                        myAdapter.notifyDataSetChanged(); // redraw the list
+
+                        // give feedback: anything on the screen
+                        Snackbar.make(binding.getRoot(), "You deleted the row", Snackbar.LENGTH_LONG)
+                                .setAction("Undo", (btn) -> {
+                                    Executor thread1 = Executors.newSingleThreadExecutor();
+                                    thread1.execute(() -> {
+                                        lDAO.insertLocation(selectedLocation);
+                                    });
+                                    theLocation.add(deletedMessagePosition, selectedLocation);
+                                    myAdapter.notifyDataSetChanged(); // redraw the list
+                                })
+                                .show();
+                        // Toast.makeText(ChatRoom.this, "You deleted the row",Toast.LENGTH_LONG).show();
+                    });
+
+                    builder.create().show(); // this has to be last
+                } else {
+                    Toast.makeText(this, "No message selected", Toast.LENGTH_SHORT).show();
+                }
+            } else if (itemId == R.id.help) {
+                // Show a AlertDialog with instructions for how to use the interface
+                AlertDialog.Builder builder = new AlertDialog.Builder(SunriseMain.this);
+                builder.setTitle("Instructions");
+                builder.setMessage("Select a location by clicking on it, then you can choose whether to look up the details information about it or delete it by using the toolbar.");
+                 //builder.setNegativeButton("No", (btn, obj) -> {/*if no is clicked*/});
+                 //builder.setPositiveButton("Yes", (p1, p2) -> {
+                 //                 });
+                 builder.create().show();
+
+            }
+
+            return true;
+        }
 
     // Represents a single row on the list
     class MyRowHolder extends RecyclerView.ViewHolder {
