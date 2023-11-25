@@ -226,6 +226,8 @@ public class SunriseMain extends AppCompatActivity {
                 location.id = lDAO.insertLocation(location);//get the id from the database
             });//the body of run()
 
+            Toast.makeText(SunriseMain.this, "You added the location as favourite",Toast.LENGTH_LONG).show();
+
         });
 
         binding.buttonViewFavouriteLocation.setOnClickListener(click -> {
@@ -308,8 +310,7 @@ public class SunriseMain extends AppCompatActivity {
                                     myAdapter.notifyDataSetChanged(); // redraw the list
                                 })
                                 .show();
-                        // Toast.makeText(ChatRoom.this, "You deleted the row",Toast.LENGTH_LONG).show();
-                    });
+                                            });
 
                     builder.create().show(); // this has to be last
                 } else {
