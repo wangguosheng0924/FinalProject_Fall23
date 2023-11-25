@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">FinalProject_Fall23</string>
+    <string name="app_name">Sunrise</string>
+    <string name="enter_Latitude">Please enter Latitude here</string>
+    <string name="welcome">Welcome to Final Project_Fall23!</string>
+    <string name="branchSunrise">Sunrise Sunset lookup</string>
+    <string name="branchRecipe">Recipe search</string>
+    <string name="branchDictionary">Dictionary search</string>
+    <string name="branchSong">Song search</string>
 </resources>
