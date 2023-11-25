@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Sunrise</string>
-    <string name="enter_Latitude">Please enter Latitude here</string>
     <string name="welcome">Welcome to Final Project_Fall23!</string>
-    <string name="branchSunrise">Sunrise Sunset lookup</string>
-    <string name="branchRecipe">Recipe search</string>
-    <string name="branchDictionary">Dictionary search</string>
-    <string name="branchSong">Song search</string>
+    <string name="branch_sunrise">Sunrise Sunset lookup</string>
+    <string name="branch_recipe">Recipe search</string>
+    <string name="branch_dictionary">Dictionary search</string>
+    <string name="branch_song">Song search</string>
+    <string name="enter_latitude">Please enter Latitude :</string>
+    <string name="enter_longitude">Please enter Longitude : </string>
+    <string name="lookup">lookup</string>
+    <string name="back_home_page">Back to Home Page</string>
+    <string name="save_favourite">Save as favourite location</string>
+    <string name="view_favourite">View favourite location</string>
 </resources>

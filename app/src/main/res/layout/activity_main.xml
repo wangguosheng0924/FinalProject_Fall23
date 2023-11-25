@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="@string/branchSunrise"
+        android:text="@string/branch_sunrise"
         app:layout_constraintEnd_toStartOf="@+id/recipeButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="@string/branchRecipe"
+        android:text="@string/branch_recipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sunriseButton"
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/branchDictionary"
+        android:text="@string/branch_dictionary"
         app:layout_constraintStart_toStartOf="@+id/sunriseButton"
         app:layout_constraintTop_toBottomOf="@+id/sunriseButton" />
 
@@ -52,7 +52,7 @@
         android:id="@+id/songButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/branchSong"
+        android:text="@string/branch_song"
         app:layout_constraintEnd_toEndOf="@+id/recipeButton"
         app:layout_constraintTop_toTopOf="@+id/dictionaryButton" />
 

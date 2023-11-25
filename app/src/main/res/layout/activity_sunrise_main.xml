@@ -30,7 +30,7 @@
         android:layout_height="42dp"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="24dp"
-        android:text="Please enter Latitude here: "
+        android:text="@string/enter_latitude"
         android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewLongitude"
         app:layout_constraintStart_toStartOf="@+id/textViewLongitude" />
@@ -51,7 +51,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="36dp"
         android:layout_marginBottom="16dp"
-        android:text="Please enter Longitude here: "
+        android:text="@string/enter_longitude"
         android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonLookup"
         app:layout_constraintStart_toStartOf="parent" />
@@ -73,7 +73,7 @@
         android:layout_below="@id/editTextLongitude"
         android:layout_marginEnd="272dp"
         android:layout_marginBottom="10dp"
-        android:text="Lookup"
+        android:text="@string/lookup"
         app:layout_constraintBottom_toTopOf="@+id/buttonSaveAsFavouriteLocation"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -81,7 +81,7 @@
         android:id="@+id/backToMainActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back to Home Page"
+        android:text="@string/back_home_page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:text="Save as favourite location"
+        android:text="@string/save_favourite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -98,7 +98,7 @@
         android:id="@+id/buttonViewFavouriteLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View favourite location"
+        android:text="@string/view_favourite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonSaveAsFavouriteLocation" />
 
