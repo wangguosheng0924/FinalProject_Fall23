@@ -11,48 +11,38 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import algonquin.cst2335.finalproject_fall23.data.LocationViewModel;
-import algonquin.cst2335.finalproject_fall23.databinding.ActivitySunriseMainBinding;
-import algonquin.cst2335.finalproject_fall23.databinding.DetailsLayoutBinding;
-import algonquin.cst2335.finalproject_fall23.databinding.LocationBinding;
+import algonquin.cst2335.finalproject_fall23.databinding.SunriseMainBinding;
+import algonquin.cst2335.finalproject_fall23.databinding.SunriseLocationBinding;
 
 public class SunriseMain extends AppCompatActivity {
 
-    ActivitySunriseMainBinding binding;
+    SunriseMainBinding binding;
     LocationDAO lDAO;
     Location selectedLocation;
     LocationViewModel locationModel;
@@ -65,7 +55,7 @@ public class SunriseMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySunriseMainBinding.inflate(getLayoutInflater());
+        binding = SunriseMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         //This part goes at the top of the onCreate function:
@@ -95,7 +85,7 @@ public class SunriseMain extends AppCompatActivity {
             @NonNull
             @Override
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                LocationBinding rowBinding = LocationBinding.inflate(getLayoutInflater(), parent, false);
+                SunriseLocationBinding rowBinding = SunriseLocationBinding.inflate(getLayoutInflater(), parent, false);
                 return new MyRowHolder(rowBinding.getRoot());
             }
 
@@ -158,6 +148,7 @@ public class SunriseMain extends AppCompatActivity {
                         try {
                             // Extract weather information from the JSON response
                             JSONObject mainObject = response.getJSONObject( "results" );
+
                             String timeSunrise = mainObject.getString("sunrise");
                             String timeSunset = mainObject.getString("sunset");
                             String timeFirstLight = mainObject.getString("first_light");
@@ -169,18 +160,21 @@ public class SunriseMain extends AppCompatActivity {
                             String dayLength = mainObject.getString("day_length");
                             Log.d("API_RESPONSE", response.toString());
 
-                            // Create a new fragment for message details
-                            SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
+           //                 locationModel.selectedLocation.observe(this,(selectedLocation)-> {
+                                ;
+                                // Create a new fragment for message details
+                                SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
 
-                            // Pass the sunrise details to the fragment
-                           sunriseDetailsFragment.updateSunriseDetails(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
-                                    timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
+                                // Pass the sunrise details to the fragment
+                                sunriseDetailsFragment.updateSunriseDetails(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
+                                        timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
 
-                            //to load fragments:
-                            FragmentManager fMgr = getSupportFragmentManager();
-                            FragmentTransaction tx = fMgr.beginTransaction();
-                            tx.replace(R.id.fragmentLocation, sunriseDetailsFragment);
-                            tx.commit();
+                                //to load fragments:
+                                FragmentManager fMgr = getSupportFragmentManager();
+                                FragmentTransaction tx = fMgr.beginTransaction();
+                                tx.add(R.id.fragmentLocation, sunriseDetailsFragment);
+                                tx.commit();
+            //                });
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -271,6 +265,62 @@ public class SunriseMain extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if(itemId == R.id.detailsLocation) {
+                if (selectedLocation != null) {
+
+                    String newLatitude = URLEncoder.encode(selectedLocation.getLatitude().toString());
+                    String newLongitude = URLEncoder.encode(selectedLocation.getLongitude().toString());
+
+                    String url = "http://api.sunrisesunset.io/json?lat=" + newLatitude + "&lng=" + newLongitude + "&timezone=CA&date=today";
+
+                    // Create a JsonObjectRequest to fetch weather information
+                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+
+                            // Successful response callback
+                            (response) ->{
+
+                                try {
+                                    // Extract weather information from the JSON response
+                                    JSONObject mainObject = response.getJSONObject( "results" );
+
+                                    String timeSunrise = mainObject.getString("sunrise");
+                                    String timeSunset = mainObject.getString("sunset");
+                                    String timeFirstLight = mainObject.getString("first_light");
+                                    String timeLastLight = mainObject.getString("last_light");
+                                    String timeDawn = mainObject.getString("dawn");
+                                    String timeDusk = mainObject.getString("dusk");
+                                    String timeSolarNoon = mainObject.getString("solar_noon");
+                                    String timeGoldenHour = mainObject.getString("golden_hour");
+                                    String dayLength = mainObject.getString("day_length");
+                                    Log.d("API_RESPONSE", response.toString());
+
+                                    // Create a new fragment for message details
+                                    SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
+
+                                    // Pass the sunrise details to the fragment
+                                    sunriseDetailsFragment.updateSunriseDetails(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
+                                            timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
+
+                                    //to load fragments:
+                                    FragmentManager fMgr = getSupportFragmentManager();
+                                    FragmentTransaction tx = fMgr.beginTransaction();
+                                    tx.add(R.id.fragmentLocation, sunriseDetailsFragment);
+                                    tx.commit();
+
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                            },
+                            (error) ->{  error.printStackTrace();}
+                    );
+                    Log.d("SunriseMain", "Before network request");
+                    queue.add(request); // fetches from the server
+                    Log.d("SunriseMain", "After network request");
+
+                      }
+                else {
+                    Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show();
+                }
 
             }
 
@@ -314,9 +364,10 @@ public class SunriseMain extends AppCompatActivity {
 
                     builder.create().show(); // this has to be last
                 } else {
-                    Toast.makeText(this, "No message selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show();
                 }
-            } else if (itemId == R.id.help) {
+            }
+            if (itemId == R.id.help) {
                 // Show a AlertDialog with instructions for how to use the interface
                 AlertDialog.Builder builder = new AlertDialog.Builder(SunriseMain.this);
                 builder.setTitle("Instructions");

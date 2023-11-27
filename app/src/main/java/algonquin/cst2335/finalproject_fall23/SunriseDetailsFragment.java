@@ -8,17 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import algonquin.cst2335.finalproject_fall23.databinding.DetailsLayoutBinding;
+import algonquin.cst2335.finalproject_fall23.databinding.SunriseDetailsBinding;
 
 public class SunriseDetailsFragment extends Fragment {
 
-    private DetailsLayoutBinding binding;
+    private SunriseDetailsBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DetailsLayoutBinding.inflate(inflater, container, false);
+        binding = SunriseDetailsBinding.inflate(inflater, container, false);
                 return binding.getRoot();
     }
 

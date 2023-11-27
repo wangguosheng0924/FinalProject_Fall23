@@ -46,6 +46,6 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.3.2")
 
     // Room dependencies
-    implementation ("androidx.room:room-runtime:2.3.0")
-    annotationProcessor ("androidx.room:room-compiler:2.3.0")
+    implementation ("androidx.room:room-runtime:2.6.0")
+    annotationProcessor ("androidx.room:room-compiler:2.6.0")
 }
