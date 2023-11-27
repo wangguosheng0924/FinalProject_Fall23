@@ -11,20 +11,35 @@ import androidx.fragment.app.Fragment;
 import algonquin.cst2335.finalproject_fall23.databinding.SunriseDetailsBinding;
 
 public class SunriseDetailsFragment extends Fragment {
+    String sunrise;
+    String sunset;
+    String firstLight;
+    String lastLight;
+    String dawn;
+    String dusk;
+    String solarNoon;
+    String goldenHour;
+    String dayLength;
+    public SunriseDetailsFragment(String sunrise, String sunset, String firstLight, String lastLight,
+                                  String dawn, String dusk, String solarNoon, String goldenHour, String dayLength) {
+   this.sunrise=sunrise;
+        this.sunset=sunset;
+        this.firstLight=firstLight;
+        this.lastLight=lastLight;
+        this.dawn=dawn;
+        this.dusk=dusk;
+        this.solarNoon=solarNoon;
+        this.goldenHour=goldenHour;
+        this.dayLength=dayLength;
 
-    private SunriseDetailsBinding binding;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = SunriseDetailsBinding.inflate(inflater, container, false);
-                return binding.getRoot();
-    }
 
-    // Method to update UI elements with sunrise details
-    public void updateSunriseDetails(String sunrise, String sunset, String firstLight, String lastLight,
-                                     String dawn, String dusk, String solarNoon, String goldenHour, String dayLength) {
         binding.timeSunrise.setText("The sunrise time is " + sunrise);
         binding.timeSunrise.setVisibility(View.VISIBLE);
 
@@ -51,6 +66,13 @@ public class SunriseDetailsFragment extends Fragment {
 
         binding.dayLength.setText("The day_length is " + dayLength);
         binding.dayLength.setVisibility(View.VISIBLE);
+
+
+        return binding.getRoot();
     }
+    private SunriseDetailsBinding binding;
+
+
+    // Method to update UI elements with sunrise details
 
 }

@@ -138,7 +138,7 @@ public class SunriseMain extends AppCompatActivity {
             String newLatitude = URLEncoder.encode(binding.editTextLatitude.getText().toString());
             String newLongitude = URLEncoder.encode(binding.editTextLongitude.getText().toString());
 
-            String url = "http://api.sunrisesunset.io/json?lat=" + newLatitude + "&lng=" + newLongitude + "&timezone=CA&date=today";
+            String url = "https://api.sunrisesunset.io/json?lat=" + newLatitude + "&lng=" + newLongitude + "&timezone=CA&date=today";
 
             // Create a JsonObjectRequest to fetch weather information
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -164,17 +164,18 @@ public class SunriseMain extends AppCompatActivity {
                             //locationModel.selectedLocation.observe(this,(selectedLocation)-> {
                                 ;
                                 // Create a new fragment for message details
-                                SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
-
-                                // Pass the sunrise details to the fragment
-                                sunriseDetailsFragment.updateSunriseDetails(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
+                                SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
                                         timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
 
-                                //to load fragments:
-                                FragmentManager fMgr = getSupportFragmentManager();
-                                FragmentTransaction tx = fMgr.beginTransaction();
-                                tx.replace(R.id.fragmentLocation, sunriseDetailsFragment);
-                                tx.commit();
+                           //to load fragments:
+                            FragmentManager fMgr = getSupportFragmentManager();
+                            FragmentTransaction tx = fMgr.beginTransaction();
+                            tx.replace(R.id.fragmentLocation, sunriseDetailsFragment);
+                            tx.commit();
+
+
+
+
                            //});
 
                         } catch (JSONException e) {
@@ -299,11 +300,9 @@ public class SunriseMain extends AppCompatActivity {
                                     Log.d("API_RESPONSE", response.toString());
 
                                     // Create a new fragment for message details
-                                    SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
-
-                                    // Pass the sunrise details to the fragment
-                                    sunriseDetailsFragment.updateSunriseDetails(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
+                                    SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
                                             timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
+
 
                                     //to load fragments:
                                     FragmentManager fMgr = getSupportFragmentManager();

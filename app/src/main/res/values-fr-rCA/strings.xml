@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Lever du soleil</string>
+    <string name="welcome">Bienvenue dans Final Project_Fall23 !</string>
+    <string name="branch_sunrise">Recherche du lever du soleil et du coucher du soleil</string>
+    <string name="branch_recipe">Recherche de recettes</string>
+    <string name="branch_dictionary">Recherche dans le dictionnaire</string>
+    <string name="branch_song">Recherche de musique</string>
+    <string name="enter_latitude">veuillez entrer la latitude :</string>
+    <string name="enter_longitude">Veuillez saisir la longitude :</string>
+    <string name="lookup">chercher</string>
+    <string name="back_home_page">Retour à la page d\'accueil</string>
+    <string name="save_favourite">Enregistrer  favori</string>
+    <string name="view_favourite">Afficher favori</string>
+</resources>
+
