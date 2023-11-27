@@ -13,17 +13,19 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import algonquin.cst2335.finalproject_fall23.databinding.ActivityRecipeMainBinding;
+import algonquin.cst2335.finalproject_fall23.databinding.RecipeMainBinding;
 
 public class RecipeMain extends AppCompatActivity {
 
-    ActivityRecipeMainBinding binding;
+    RecipeMainBinding binding;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityRecipeMainBinding.inflate(getLayoutInflater());
+        binding = RecipeMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Set up RecyclerView and Adapter
@@ -68,26 +70,22 @@ public class RecipeMain extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
         // Click handler for the buttonSearch
-        binding.buttonSearch.setOnClickListener(click ->{
-            String newRecipe = binding.editTextRecipe.getText().toString();
+//        binding.buttonSearch.setOnClickListener(click ->{
+//            String newRecipe = binding.editTextRecipe.getText().toString();
 
             // Save the entered Recipe to disk (SharedPreferences)
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("Recipe", binding.editTextRecipe.getText().toString());
             editor.apply();//send to disk
 // code here
-        });
+//        });
 
         // Load the last entered Latitude and Longitude from SharedPreferences
         String lastEnteredRecipe = prefs.getString("Recipe", "");
         binding.editTextRecipe.setText(lastEnteredRecipe);
 
 
-        // Handle the backToMainActivityButton click
-        binding.backToMainActivityButton.setOnClickListener(click -> {
-            // to go back:
-            finish();
-        });
+
 
     };
 }
