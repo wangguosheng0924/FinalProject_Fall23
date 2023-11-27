@@ -12,6 +12,7 @@ import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -160,7 +161,7 @@ public class SunriseMain extends AppCompatActivity {
                             String dayLength = mainObject.getString("day_length");
                             Log.d("API_RESPONSE", response.toString());
 
-           //                 locationModel.selectedLocation.observe(this,(selectedLocation)-> {
+                            //locationModel.selectedLocation.observe(this,(selectedLocation)-> {
                                 ;
                                 // Create a new fragment for message details
                                 SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment();
@@ -172,9 +173,9 @@ public class SunriseMain extends AppCompatActivity {
                                 //to load fragments:
                                 FragmentManager fMgr = getSupportFragmentManager();
                                 FragmentTransaction tx = fMgr.beginTransaction();
-                                tx.add(R.id.fragmentLocation, sunriseDetailsFragment);
+                                tx.replace(R.id.fragmentLocation, sunriseDetailsFragment);
                                 tx.commit();
-            //                });
+                           //});
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -244,11 +245,11 @@ public class SunriseMain extends AppCompatActivity {
 
         });
 
-        // Handle the backToMainActivityButton click
-        binding.backToMainActivityButton.setOnClickListener(click -> {
-            // to go back:
-            finish();
-        });
+//        // Handle the backToMainActivityButton click
+//        binding.backToMainActivityButton.setOnClickListener(click -> {
+//            // to go back:
+//            finish();
+//        });
 
     }
     // Override method for creating the options menu
@@ -264,9 +265,13 @@ public class SunriseMain extends AppCompatActivity {
 
             int itemId = item.getItemId();
 
+            if(itemId == R.id.homepage) {
+                Toast.makeText(this, "Back to home page", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SunriseMain.this, MainActivity.class));
+            }
+
             if(itemId == R.id.detailsLocation) {
                 if (selectedLocation != null) {
-
                     String newLatitude = URLEncoder.encode(selectedLocation.getLatitude().toString());
                     String newLongitude = URLEncoder.encode(selectedLocation.getLongitude().toString());
 
@@ -319,9 +324,8 @@ public class SunriseMain extends AppCompatActivity {
 
                       }
                 else {
-                    Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No favourite location selected", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             if (itemId == R.id.deleteLocation) {
@@ -364,19 +368,19 @@ public class SunriseMain extends AppCompatActivity {
 
                     builder.create().show(); // this has to be last
                 } else {
-                    Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "No favourite location selected", Toast.LENGTH_SHORT).show();
                 }
             }
+
             if (itemId == R.id.help) {
                 // Show a AlertDialog with instructions for how to use the interface
                 AlertDialog.Builder builder = new AlertDialog.Builder(SunriseMain.this);
                 builder.setTitle("Instructions");
-                builder.setMessage("Select a location by clicking on it, then you can choose whether to look up the details information about it or delete it by using the toolbar.");
+                builder.setMessage("Select a favourite location by clicking on it, then you can choose whether to look up the details information about it or delete it by using the toolbar.");
                  //builder.setNegativeButton("No", (btn, obj) -> {/*if no is clicked*/});
                  //builder.setPositiveButton("Yes", (p1, p2) -> {
                  //                 });
                  builder.create().show();
-
             }
 
             return true;
