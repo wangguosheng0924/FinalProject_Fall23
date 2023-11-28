@@ -91,7 +91,7 @@ public class ArtistsSearch extends AppCompatActivity {
             editor.putString("lastSearch", userInput);
             editor.apply();
 
-            binding.artistName.setText("You are searching songs of: " + userInput);
+            binding.artistName.setText("Here are the songs of: " + userInput);
             binding.artistName.setVisibility(View.VISIBLE);
 
             Toast.makeText(ArtistsSearch.this, "Click song tile to check " +
