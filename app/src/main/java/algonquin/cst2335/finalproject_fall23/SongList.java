@@ -18,21 +18,21 @@ public class SongList {
     public long Id;
 
     @ColumnInfo(name = "artist")
-    protected String artist;
+    public String artist;
 
     @ColumnInfo(name = "songTitle")
-    String songTitle;
+    public String songTitle;
 
 
 
     @ColumnInfo(name = "duration")
-    int duration;
+    public int duration;
 
     @ColumnInfo(name = "albumName")
-    String albumName;
+    public String albumName;
 
     @ColumnInfo(name = "Collection")
-    protected String Collection;
+    public String Collection;
 
 
     public SongList() {

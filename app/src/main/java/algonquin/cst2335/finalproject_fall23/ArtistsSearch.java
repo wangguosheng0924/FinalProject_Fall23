@@ -94,8 +94,8 @@ public class ArtistsSearch extends AppCompatActivity {
             binding.artistName.setText("You are searching songs of: " + userInput);
             binding.artistName.setVisibility(View.VISIBLE);
 
-            Toast.makeText(ArtistsSearch.this, "Click on any song to check " +
-                            "the song detailed information!)",
+            Toast.makeText(ArtistsSearch.this, "Click song tile to check " +
+                            "the details",
                     Toast.LENGTH_SHORT).show();
 
             // First API Request
@@ -123,8 +123,10 @@ public class ArtistsSearch extends AppCompatActivity {
 
                                                         JSONArray dataArray =
                                                                 response2.getJSONArray(
-                                                                "data");
-                                                      for (int i=0;i<dataArray.length();i++){
+                                                                        "data");
+
+
+                                                        for (int i = 0; i < 50; i++) {
                                                             JSONObject songObject = dataArray.getJSONObject(i);
                                                             songTitle = songObject.getString("title");
                                                             duration = songObject.getInt("duration");
@@ -170,19 +172,19 @@ public class ArtistsSearch extends AppCompatActivity {
                                                                 queue.add(imgReq);
                                                             }
 
-                                                          // Create SongList object and add to the list
-                                                          SongList song =
-                                                                  new SongList(userInput, songTitle, duration, albumName);
+                                                            // Create SongList object and add to the list
+                                                            SongList song =
+                                                                    new SongList(userInput, songTitle, duration, albumName);
 
 
-                                                          artistSongs.add(song);
-                                                      }
-                                                        // Notify the adapter about the data change
+                                                            artistSongs.add(song);
+                                                        }
                                                         myAdapter.notifyDataSetChanged();
+
                                                     } catch (JSONException e) {
                                                         Log.e("ArtistSearch",
                                                                 "JSON " +
-                                                                "parsing error: " + e.getMessage());
+                                                                        "parsing error: " + e.getMessage());
                                                     }
                                                 },
                                                 error -> Log.e("ArtistSearch", "Volley error: " + error.getMessage())
@@ -205,80 +207,72 @@ public class ArtistsSearch extends AppCompatActivity {
         });
 
 
+        binding.songList.setAdapter(myAdapter =
+                new RecyclerView.Adapter<MyRowHolder>() {
+                    @NonNull
+                    @Override
+                    public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                                          int viewType) {
+
+                        SongListBinding binding =
+                                SongListBinding.inflate(getLayoutInflater(), parent, false);
 
 
+                        return new MyRowHolder(binding.getRoot());
+                    }
+
+                    @Override
+                    public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
+                        SongList song = artistSongs.get(position);
+
+                        holder.songName.setText(song.songTitle);
 
 
+                        View.OnClickListener clickListener = view -> {
+                            String clickedText = view.getTag().toString();
+
+                            // Show a Toast message
 
 
-        binding.songList.setAdapter(myAdapter=
-            new RecyclerView.Adapter<MyRowHolder>()
+                            Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
+                            intent.putExtra("artistName", song.artist);
+                            intent.putExtra("songTitle", clickedText);
 
-    {
-        @NonNull
-        @Override
-        public MyRowHolder onCreateViewHolder (@NonNull ViewGroup parent,
-        int viewType){
+                            intent.putExtra("albumCover", "app_icon");
+                            startActivity(intent);
+                        };
 
-        SongListBinding binding =
-                SongListBinding.inflate(getLayoutInflater(), parent, false);
-
-
-        return new MyRowHolder(binding.getRoot());
-    }
-
-        @Override
-        public void onBindViewHolder (@NonNull MyRowHolder holder,int position){
-        SongList song = artistSongs.get(position);
-
-        holder.songName.setText(songTitle);
+                        //  holder.artistName.setOnClickListener(clickListener);
+                        holder.songName.setOnClickListener(clickListener);
 
 
-        View.OnClickListener clickListener = view -> {
-            String clickedText = view.getTag().toString();
-
-            // Show a Toast message
+                    }
 
 
-            Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
-            intent.putExtra("artistName", song.artist);
-            intent.putExtra("songTitle", clickedText);
-
-            intent.putExtra("albumCover", "app_icon");
-            startActivity(intent);
-        };
-
-        //  holder.artistName.setOnClickListener(clickListener);
-        holder.songName.setOnClickListener(clickListener);
-
-
-    }
-
-
-        @Override
-        public int getItemCount () {
-        return artistSongs.size();
-    }
-    });
+                    @Override
+                    public int getItemCount() {
+                        return artistSongs.size();
+                    }
+                });
         binding.songList.setAdapter(myAdapter);
         binding.songList.setLayoutManager(new
 
-    LinearLayoutManager(this));
-
-
-}
-
-class MyRowHolder extends RecyclerView.ViewHolder {
-
-
-    TextView songName;
-
-
-    public MyRowHolder(@NonNull View itemView) {
-        super(itemView);
-        songName = itemView.findViewById(R.id.songName);
+                LinearLayoutManager(this));
 
 
     }
-}
+
+    class MyRowHolder extends RecyclerView.ViewHolder {
+
+
+        TextView songName;
+
+
+        public MyRowHolder(@NonNull View itemView) {
+            super(itemView);
+            songName = itemView.findViewById(R.id.songName);
+
+
+        }
+    }
 }

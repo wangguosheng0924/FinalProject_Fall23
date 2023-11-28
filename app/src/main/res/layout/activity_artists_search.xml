@@ -25,7 +25,7 @@
         android:layout_height="38dp"
         android:layout_marginTop="20dp"
         android:text="Artist name goes here"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/songList"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="invisible"
@@ -40,10 +40,11 @@
         android:layout_marginTop="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.267" />
 
     <Button
         android:id="@+id/searchButton"
@@ -64,7 +65,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="124dp"
         android:layout_marginEnd="10dp"
-        android:ems="10"
+        android:ems="8"
         android:hint="@string/searchHint"
         android:inputType="text"
         android:shadowColor="@color/design_default_color_primary"
@@ -80,7 +81,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
         android:text="Welcome to Deezer song search!"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
