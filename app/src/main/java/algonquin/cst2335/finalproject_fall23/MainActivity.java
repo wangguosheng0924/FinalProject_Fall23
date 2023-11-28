@@ -18,12 +18,12 @@ public class MainActivity extends AppCompatActivity {
         binding =ActivityMainBinding.inflate((getLayoutInflater()));
         setContentView(binding.getRoot());
 
-        binding.sunriseButton.setOnClickListener( click -> {
-            startActivity(new Intent(this,SunriseMain.class));
-        });
+//        binding.sunriseButton.setOnClickListener( click -> {
+//            startActivity(new Intent(this,SunriseMain.class));
+//        });
 
         binding.recipeButton.setOnClickListener( click -> {
-            startActivity(new Intent(this,RecipeMain.class));
+            startActivity(new Intent(this,RecipeSearch.class));
         });
 
     }

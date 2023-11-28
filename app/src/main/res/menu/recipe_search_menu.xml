@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Text color. -->
+    <item
+        android:id="@+id/saveRecipe"
+        android:title="save Recipe"
+        android:icon="@drawable/save"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/homePage"
+        android:title="Home Page"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mainPage"
+        android:title="main Page"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/help"
+        android:title="Help"
+        app:showAsAction="never" />
+
+</menu>

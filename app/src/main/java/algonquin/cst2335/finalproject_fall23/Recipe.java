@@ -15,7 +15,7 @@ public class Recipe {
     @ColumnInfo(name="image")
     String image;
 
-public Recipe(int apiId,String title,String image){
+public Recipe(String title,String image,int apiId){
     this.apiId=apiId;
     this.title=title;
     this.image=image;
