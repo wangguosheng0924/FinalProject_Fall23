@@ -71,14 +71,13 @@ public class SongDetail extends AppCompatActivity {
 
 
         Bundle extras = getIntent().getExtras();
-          imageFilePath = extras.getString("imageFilePath", "");
+          imageFilePath = extras.getString("imageURL", "");
 
             binding.songTitle.setText(extras.getString("songTitle", "Default Song"));
             binding.artistName.setText(extras.getString("artistName", "Default Artist"));
             binding.duration.setText(extras.getString("duration" ,""));
             binding.albumName.setText(extras.getString("albumName", ""));
             binding.collection.setText(extras.getString("Collection", ""));
-            albumCoverName = extras.getString("albumCover", "Default Song");
 
 
             File imgFile = new File(imageFilePath);

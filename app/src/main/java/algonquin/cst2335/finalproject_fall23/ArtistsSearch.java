@@ -127,8 +127,7 @@ public class ArtistsSearch extends AppCompatActivity {
                                                                 response2.getJSONArray(
                                                                         "data");
 
-                                                        // Outside the for-loop, declare an array to hold savedImagePath
-                                                        final String[] savedImagePath = new String[1];
+
 
                                                         for (int i = 0; i < 50; i++) {
                                                             JSONObject songObject = dataArray.getJSONObject(i);
@@ -139,53 +138,14 @@ public class ArtistsSearch extends AppCompatActivity {
                                                                     albumObject.getString("title");
                                                             String md5_image = albumObject.getString("md5_image");
 
-                                                            String imageURL = "http://e-cdns-images.dzcdn" +
-                                                                    ".net/images/cover/" + md5_image + "/250x250" +
-                                                                    "-000000" +
-                                                                    "-80-0-0" +
-                                                                    ".jpg";
-                                                            File imageView =
-                                                                    new File(getFilesDir() + "/" + md5_image + ".jpg");
 
 
 
-                                                            if (imageView.exists()) {
-                                                                Bitmap theImage= BitmapFactory.decodeFile(imageView.getAbsolutePath());
-                                                                binding.imageView.setImageBitmap(theImage);
-                                                                binding.imageView.setVisibility(View.VISIBLE);
 
-                                                            } else {
-
-                                                                ImageRequest imgReq =
-                                                                        new ImageRequest(imageURL,
-                                                                                bitmap -> {
-                                                                                    binding.imageView.setImageBitmap(bitmap);
-                                                                                    binding.imageView.setVisibility(View.VISIBLE);
-
-
-
-                                                                                    try (  FileOutputStream fOut= openFileOutput(md5_image + ".jpg", Context.MODE_PRIVATE)) {
-                                                                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                                                                                        fOut.flush();
-
-
-
-                                                                                    } catch (
-                                                                                            IOException e) {
-                                                                                        Log.e("ArtistSearch", "Saving image failed: " + e.getMessage());
-                                                                                    }
-
-
-
-                                                                                }, 1024, 1024, ImageView.ScaleType.FIT_CENTER, null,
-                                                                                error -> Log.e("MainActivity", "Image request error: " + error.getMessage())
-                                                                        );
-                                                                queue.add(imgReq);
-                                                            }
 
                                                             // Create SongList object and add to the list
                                                             SongList song =
-                                                                    new SongList(userInput, songTitle, duration, albumName, savedImagePath[0]);
+                                                                    new SongList(userInput, songTitle, duration, albumName,md5_image );
 
                                                             artistSongs.add(song);
 
@@ -239,12 +199,10 @@ public class ArtistsSearch extends AppCompatActivity {
 
 
                         View.OnClickListener clickListener = view -> {
-
-
                             Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
                             intent.putExtra("artistName", song.artist);
                             intent.putExtra("songTitle",  song.songTitle);
-                            intent.putExtra("imageFilePath", song.imageURL);
+                            intent.putExtra("imageURL", song.imageURL);
                             intent.putExtra("duration", song.duration);
                             intent.putExtra("albumName", song.albumName);
                             intent.putExtra("Collection", song.Collection);
