@@ -27,4 +27,9 @@
     <string name="back_home_page">Back to Home Page</string>
     <string name="save_favourite">Save as favourite location</string>
     <string name="view_favourite">View favourite location</string>
+    <string name="dictionary_title">Dictionary</string>
+    <string name="search_definition">search definition</string>
+    <string name="search_button">Search</string>
+    <string name="save_button">Save</string>
+    <string name="history_button">Review History</string>
 </resources>

@@ -31,4 +31,16 @@
        />
 
 
+
+
+    <item
+        android:id="@+id/item_dictionary"
+        android:icon="@drawable/icondictionary"
+        android:title="Go to the dictionary"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/item_about"
+        android:icon="@drawable/iconhelp"
+        android:title="About"
+        app:showAsAction="always" />
 </menu>

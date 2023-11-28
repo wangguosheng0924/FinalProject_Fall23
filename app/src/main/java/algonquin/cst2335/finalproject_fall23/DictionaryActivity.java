@@ -1,13 +1,19 @@
 package algonquin.cst2335.finalproject_fall23;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +25,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,179 +52,168 @@ import retrofit2.Response;
 
 public class DictionaryActivity extends AppCompatActivity {
     DictionaryactivityMainBinding binding;
-    ArrayList<String> definitions;
+    ArrayList<String> definitions; //<definition>
     DefinitionViewModel definitionModel;
     DefinitionDAO mDAO;
     RecyclerView.Adapter myAdapter;
 
-    //int selectedIndex;
+    protected RequestQueue queue = null;
 
-    //if not using binding you can get the elements by this way.
-    //EditText searchEditText = findViewById(R.id.editText);
-    //EditText searchEditText = binding.editText;
-    //String searchTerm = searchEditText.getText().toString();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //before using binding use this line.
-        //setContentView(R.layout.dictionaryactivity_main);
-        //use binding to access views defined in the layout.
+        //before using binding use this line: setContentView(R.layout.dictionaryactivity_main);
+        //use binding to access the views defined in the layout.
         binding = DictionaryactivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Toast.makeText(this, "Welcome to Dictionary", Toast.LENGTH_LONG).show();
         EditText searchEditText = binding.editText;
-
-        //binding.editText = findViewById(R.id.editText);
-//        String searchTerm = searchEditText.getText().toString();
+        //how to use toast.
+        Toast.makeText(this, "Welcome to Dictionary", Toast.LENGTH_LONG).show();
         //apply SharedPreference
         SharedPreferences prefs1 = getSharedPreferences("searchTerm", Context.MODE_PRIVATE);
         searchEditText.setText(prefs1.getString("searchTerm", ""));
 
-        //prefs=this.getSharedPreferences("com.yourapp.dictionary_preferences",MODE_PRIVATE);
-//        searchTerm=prefs.getString("LastSearchWord","");
-//        searchEditText.setText("searchTerm");
-
         //open a database
         DefinitionDB db = Room.databaseBuilder(getApplicationContext(), DefinitionDB.class, "databaseLocal").build();
         mDAO = db.cmDAO();
-
+        //definition initialization
         definitionModel = new ViewModelProvider(this).get(DefinitionViewModel.class);
         if(definitionModel.definitions.getValue()!=null){
             definitions =definitionModel.definitions.getValue();}
         else{definitions = new ArrayList<>();
         }
 
-        //click listener for the search button
+        //search button:
         Button searchButton = findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> {
             String searchTerm = binding.editText.getText().toString();
             definitions.add(searchTerm);
 
             // save the last searched term
-            SharedPreferences prefs2=getSharedPreferences("searchTerm",Context.MODE_PRIVATE);
-
-            SharedPreferences.Editor editor=prefs1.edit();
-            editor.putString("searchTerm",searchTerm);
+            SharedPreferences prefs2 = getSharedPreferences("searchTerm", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs1.edit();
+            editor.putString("searchTerm", searchTerm);
             editor.apply();
 
-//            String searchTerm=prefs1.getString("LastSearchWord","");
-//            Log.d("DictionaryActivity", "Search Term: " + searchTerm);
-            //searchTerm = searchEditText.getText().toString();
+            myAdapter.notifyItemInserted(definitions.size() - 1);
 
-//            binding.editText.setText("");
-            myAdapter.notifyItemInserted(definitions.size()-1);
+            // use volley to retrieve data form the server
+            String stringURL = " https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
 
-//            //use DictionaryApiService to connect the external url.
-//            if (!searchTerm.isEmpty()) {
-//                // Call the API to get definitions for the search term
-//                DictionaryApiService apiService = DictionaryApi.getService();
-//                Call<List<Definition>> call = apiService.getDefinitions(searchTerm);
-//                call.enqueue(new Callback<List<Definition>>() {
-//                    @Override
-//                    public void onResponse(Call<List<Definition>> call, Response<List<Definition>> response) {
-//                        String errorMessage;
-//                        if (response.isSuccessful()) {
-//                            // Update the UI with the definitions
-//                            List<Definition> retrievedDefinitions = response.body();
-//                            if (retrievedDefinitions != null && !retrievedDefinitions.isEmpty()) {
-//                                // Display definitions in RecyclerView
-//                                definitions.clear();
-//                                definitions.addAll(retrievedDefinitions);
-//                                Log.d("DictionaryActivity", "API Response Success");
-//                                // Update RecyclerView adapter or any other UI updates
-//                                // For example: recyclerViewAdapter.notifyDataSetChanged();
-//                            } else {
-//                                showToast("No definitions found.");
-//                                Log.d("DictionaryActivity", "No found the term");
-//                            }
-//                        } else {
-//                            showToast("Unsuccessful response. Please try again.");
-//                            Log.d("DictionaryActivity", "API Response Unsuccessful: " + response.code());
-//                        }
-//
-//                    }
-//                    @Override
-//                    public void onFailure(Call<List<Definition>> call, Throwable t) {
-//                        showToast("Network request failure");
-//                        Log.e("DictionaryActivity", "API Call Failure", t);
-//                    }
-//                });
-//            } else {
-//                showToast("Please enter a term to search");
-//            }
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
+                    (response) -> {
+                        //get the data back from the response
+                        int size = response.length();
+                        for(int i = 0; i<size; i++){
+                            try {
+                                JSONObject definition = response.getJSONObject(String.valueOf(i));
+                                JSONArray meanings = definition.getJSONArray("meanings");
+                                for (int j = 0; j< meanings.length(); j++){
+                                    JSONObject meaning = meanings.getJSONObject(j);
+                                    JSONArray definitions = meaning.getJSONArray("definitions");
+                                    for(int k = 0; k< definitions.length(); k++){
+                                        JSONObject obj= definitions.getJSONObject(k);
+                                        String def = obj.getString("definition");
+                                        def.length();
+                                    }
+                                }
+                            } catch (JSONException e){
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        // locate the textView and setText in the textView
+
+                    },
+                    error -> {
+                    }
+            );// end of JsonObjectRequest
+            queue.add(request);
         }); // end of the searchButton.setOnClickListener.
 
 
-        //click listener for the save button
+        //save button: should I put this definitions as <string> or <definition>?
         Button saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener(clk->{
             Definition newDefinition = new Definition();
-          //  newDefinition.setTerm(searchTerm);
-//            newDefinition.setDefinition(definition);
-//            long insertedId = cmDAO.insertDefinition(newDefinition);
-//
-//// Check if insertion was successful
-//            if (insertedId > 0) {
-//                showToast("Definition saved successfully");
-//            } else {
-//                showToast("Failed to save definition");
-//            }
         });
 
-        //click listener for the history button
+        //history button:
          Button historyButton= findViewById(R.id.history_button);
          historyButton.setOnClickListener(clk->{
-            // List<Definition> historyDefinitions = getAllDefinitions();
-
-             // Assuming you have a RecyclerView and its adapter named 'recyclerView' and 'recyclerViewAdapter'
-
-// Update the adapter's dataset with the retrieved definitions
-//             recyclerViewAdapter.setDefinitions(allDefinitions);
-
-// Notify the adapter that the dataset has changed
-//             recyclerViewAdapter.notifyDataSetChanged();
 
          });
+        // set a Linear layout manager as the layout manager for the recycleView.
+        // the items in the recyclerView can be arranged either vertical or horizontal.
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // setAdapter here
+        // setAdapter for recyclerView
         binding.recyclerView.setAdapter(myAdapter= new RecyclerView.Adapter<MyRowHolder>() {
-//            TextView searched_term = binding.searched_term;
-//            String searchTerm = searched_term.getText().toString();
             @NonNull
             @Override
+            //adapter is like a bridge to create a new view-myrowholder
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 PostsearchlayoutBinding binding1 = PostsearchlayoutBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding1.getRoot());
+                return new MyRowHolder(binding1.getRoot()); // put binding1 into this viewHolder for items.
             }
             @Override
+            //adapter is like a bridge to bind data into the viewholder-myrowholder in the recyclerview.
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-//                selectedIndex = position;
-//                String forRow = definitions.get(position).toString();
-                holder.searched_term.setText("forRow");
+                holder.searched_term.setText(holder.searched_term.getText());
+                holder.def1.setText(holder.def1.getText());
+                holder.def2.setText(holder.def2.getText());
+                holder.def3.setText(holder.def3.getText());
             }
             @Override
             public int getItemCount() {
-                //return definitions.size();
                 return definitions != null ? definitions.size() : 0;
             }
-//            @Override
-//            public int getItemViewType(int position){
-//                return 0;
-//            }
         });// end of setAdapter
 
+        //initialize the toolbar. Android will call onCreateOptionsMenu().
+        setSupportActionBar(binding.myToolbar);
+
     } //end of onCreate()
+
+    @Override //this initialized the toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dictionary_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override // this defines when users select a menuItem
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch( item.getItemId() )
+        {
+            case R.id.item1:
+                AlertDialog.Builder builder = new AlertDialog.Builder( DictionaryActivity.this );
+                builder.setMessage("search a word to check the definition by clicking 'search'." +
+                        "\nsave your searched work and its definitions to device by clicking 'save'." +
+                        "\nreview your search history by click 'history'");
+                builder.setTitle("Help");
+                builder.create().show();
+                break;
+        }
+        return true;
+    }
+
 
     //myRowHolder
     class MyRowHolder extends RecyclerView.ViewHolder {
         TextView searched_term;
+        TextView def1;
+        TextView def2;
+        TextView def3;
         //String definition;
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
             searched_term=itemView.findViewById(R.id.searched_term);
-            itemView.setOnClickListener(clk -> {
+            // 实现你的数据集合以及创建和绑定视图项的逻辑
+            def1=itemView.findViewById(R.id.def1);
+            def2=itemView.findViewById(R.id.def2);
+            def3=itemView.findViewById(R.id.def3);
 
+            itemView.setOnClickListener(clk -> {
                 int position = getAdapterPosition();
                 String selectedTerm = definitions.get(position);
                 definitionModel.selectedDefinition.postValue(selectedTerm);
@@ -220,13 +228,6 @@ public class DictionaryActivity extends AppCompatActivity {
                     Snackbar.make(searched_term,"You deleted message #"+ position, Snackbar.LENGTH_LONG).setAction("Undo", click->{
                         definitions.add(position, selectedDefinition);
                         myAdapter.notifyItemInserted(position);
-//                        Executor thread1 = Executors.newSingleThreadExecutor();
-//                        thread1.execute(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mDAO.insertMessage(m);
-//                            }
-//                        });
                     }).show();
                 });
                 builder.create().show();

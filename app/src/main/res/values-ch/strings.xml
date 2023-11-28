@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">期末设计</string>
+    <string name="dictionary_title">字典</string>
+    <string name="search_definition">搜索定义</string>
+    <string name="search_button">搜索</string>
+    <string name="save_button">保存</string>
+    <string name="history_button">搜索历史</string>
+</resources>
