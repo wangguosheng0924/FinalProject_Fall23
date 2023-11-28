@@ -140,7 +140,7 @@ public class SongDetail extends AppCompatActivity {
 
 
             // Create a SongList object
-            SongList thisSong = new SongList(artistN, song, albumCoverName, du, aN);
+            SongList thisSong = new SongList( artistN,  song, 0, aN);
 
             songCollect.add(thisSong);
             // Database insertion on a background thread

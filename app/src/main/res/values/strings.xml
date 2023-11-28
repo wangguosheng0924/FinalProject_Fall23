@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">FinalProject_Fall23</string>
-    <string name="searchHint">Enter artist name </string>
+    <string name="searchHint">eg. Taylor Swift </string>
 </resources>

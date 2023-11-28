@@ -23,27 +23,38 @@ public class SongList {
     @ColumnInfo(name = "songTitle")
     String songTitle;
 
-    @ColumnInfo(name = "albumCover")
-    String albumCover;
+
 
     @ColumnInfo(name = "duration")
-    String duration;
+    int duration;
 
     @ColumnInfo(name = "albumName")
     String albumName;
+
+    @ColumnInfo(name = "Collection")
+    protected String Collection;
 
 
     public SongList() {
     }
 
-
-
-    public SongList(String artistN, String song,String albumCoverPath, String du, String aN) {
+    public SongList(String artistN, String song,
+                    int du, String aN) {
         artist = artistN;
         songTitle=song;
-        albumCover=albumCoverPath;
+
         duration=du;
         albumName=aN;
+        Collection="my collection";
+    }
+
+    public SongList(String artistN, String song,
+                    int du, String aN,String CL) {
+        artist = artistN;
+        songTitle=song;
+        duration=du;
+        albumName=aN;
+        Collection=CL;
     }
 
 

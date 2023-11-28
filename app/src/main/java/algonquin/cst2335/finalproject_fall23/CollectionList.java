@@ -50,9 +50,7 @@ public class CollectionList extends AppCompatActivity {
                     //        onCreateViewHolder function is responsible for creating a layout
                     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-//                        View view = LayoutInflater.from(parent.getContext())
-//                                .inflate(R.layout.collection_list, parent, false); // Inflate the item layout
-//                        return new ViewHolder(view);
+
 
                         CollectionListBinding binding =
                                 CollectionListBinding.inflate(getLayoutInflater(), parent, false);
