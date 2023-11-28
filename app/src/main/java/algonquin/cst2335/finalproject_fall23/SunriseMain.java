@@ -263,7 +263,7 @@ public class SunriseMain extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         //inflate a menu into the toolbar
-        getMenuInflater().inflate(R.menu.my_menu, menu);
+        getMenuInflater().inflate(R.menu.sunrise_menu, menu);
         return true;
     }
     @SuppressLint("NonConstantResourceId")
