@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
+// the variables declared depend on the data extracted form the url. continued to be changed.
 public class Definition {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="id")
