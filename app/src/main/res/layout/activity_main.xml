@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Final Project_Fall23!"
+        android:text="@string/welcome"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="Sunrise Sunset lookup"
+        android:text="@string/branch_sunrise"
         app:layout_constraintEnd_toStartOf="@+id/recipeButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="Recipe search"
+        android:text="@string/branch_recipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sunriseButton"
@@ -44,15 +44,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Dictionary search"
+        android:text="@string/branch_dictionary"
         app:layout_constraintStart_toStartOf="@+id/sunriseButton"
         app:layout_constraintTop_toBottomOf="@+id/sunriseButton" />
 
     <Button
-        android:id="@+id/songBtton"
+        android:id="@+id/songButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Song search "
+        android:text="@string/branch_song"
         app:layout_constraintEnd_toEndOf="@+id/recipeButton"
         app:layout_constraintTop_toTopOf="@+id/dictionaryButton" />
 
