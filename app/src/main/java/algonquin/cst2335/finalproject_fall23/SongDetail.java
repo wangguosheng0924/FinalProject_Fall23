@@ -1,12 +1,17 @@
 package algonquin.cst2335.finalproject_fall23;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,31 +43,20 @@ public class SongDetail extends AppCompatActivity {
     TextView artistName;
 
     TextView albumName;
-
+    TextView collection;
     String albumCoverName ;
     Button saveButton;
+
+    String imageFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        songCollect = new ArrayList<>();
-
         binding = ActivitySongDetailBinding.inflate(getLayoutInflater());
-
         setContentView(binding.getRoot());
-        songTitle= findViewById(R.id.songTitle);
+        setSupportActionBar(binding.myToolbar);
 
-        artistName= findViewById(R.id.artistName);
-        albumName= findViewById(R.id.albumName);
-        duration= findViewById(R.id.duration);
-        saveButton=findViewById(R.id.saveButton);
-
-        Intent intent = getIntent();
-        songTitle.setText(intent.getStringExtra("SONG_TITLE"));
-        artistName.setText(intent.getStringExtra("ARTIST_NAME"));
-        duration.setText(intent.getStringExtra("DURATION"));
-        albumName.setText(intent.getStringExtra("ALBUM_NAME"));
-
+        songCollect = new ArrayList<>();
         //load messages from the database:
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
                         PersonalSongListData.class,
@@ -70,6 +65,32 @@ public class SongDetail extends AppCompatActivity {
                 .build();
 
         sDAO = db.cmDAO();//get a DAO object to interact with database
+
+
+
+
+
+        Bundle extras = getIntent().getExtras();
+          imageFilePath = extras.getString("imageFilePath", "");
+
+            binding.songTitle.setText(extras.getString("songTitle", "Default Song"));
+            binding.artistName.setText(extras.getString("artistName", "Default Artist"));
+            binding.duration.setText(extras.getString("duration" ,""));
+            binding.albumName.setText(extras.getString("albumName", ""));
+            binding.collection.setText(extras.getString("Collection", ""));
+            albumCoverName = extras.getString("albumCover", "Default Song");
+
+
+            File imgFile = new File(imageFilePath);
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imageFilePath);
+                binding.albumCover.setImageBitmap(myBitmap);
+
+
+
+            } else {
+                Log.e("LoadImage", "Image file not found: " + imageFilePath);
+            }
 
 
         Executor thread2 = Executors.newSingleThreadExecutor();
@@ -82,53 +103,6 @@ public class SongDetail extends AppCompatActivity {
         //end of loading from database
 
 
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            String artist = extras.getString("artistName", "Default Artist");
-            String song = extras.getString("songTitle", "Default Song");
-            albumCoverName = extras.getString("albumCover", "Default Song");
-
-
-            artistName.setText(artist);
-            songTitle.setText(song);
-
-        }
-
-        binding.deleteButton.setOnClickListener(click -> {
-            String songTitleToDelete = songTitle.getText().toString();
-            AlertDialog.Builder builder =
-                    new AlertDialog.Builder(SongDetail.this);
-
-            builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
-            builder.setMessage("Do you want to delete this song?");
-            builder.setTitle("Delete");
-
-
-            builder.setPositiveButton("yes", (p1, p2) -> {
-//                    //add to database on another thread
-                Executor thread = Executors.newSingleThreadExecutor();
-                /*this runs in another thread*/
-                thread.execute(() -> {
-                    for (SongList song : songCollect) {
-                        if (song.songTitle.equals(songTitleToDelete)) {
-                            sDAO.deleteMessage(song);
-                            break; // Exit loop after finding and deleting the song
-                        }
-                    }
-                    runOnUiThread(() -> {
-                Intent returnIntent = new Intent(SongDetail.this, CollectionList.class);
-                startActivity(returnIntent);
-                finish(); // Close the current activity
-
-                    });
-                });
-            });
-                builder.create().show(); //this has to be last
-
-            });
-//
-
         binding.saveButton.setOnClickListener(click -> {
 
             // Assuming you have artistName and songTitle TextViews
@@ -136,11 +110,12 @@ public class SongDetail extends AppCompatActivity {
             String artistN = artistName.getText().toString();
             String song = songTitle.getText().toString();
             String aN = albumName.getText().toString();
-            String du = duration.getText().toString();
+            int du =  Integer.parseInt(binding.duration.getText().toString());
 
 
             // Create a SongList object
-            SongList thisSong = new SongList( artistN,  song, 0, aN);
+            SongList thisSong = new SongList(  artistN,   song,
+              du,   aN,  imageFilePath);
 
             songCollect.add(thisSong);
             // Database insertion on a background thread
@@ -156,17 +131,71 @@ public class SongDetail extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         });
 
-        binding.historyButton.setOnClickListener(click -> {
 
-
-            Intent intent2 = new Intent(SongDetail.this, CollectionList.class);
-
-            startActivity(intent2);
-
-
-
-
-            });
         };
 
+    @Override //initialize the toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return true;
+
     }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.item_1:
+
+
+                    String songTitleToDelete = songTitle.getText().toString();
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(SongDetail.this);
+
+                    builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
+                    builder.setMessage("Do you want to delete this song?");
+                    builder.setTitle("Delete?");
+
+
+                    builder.setPositiveButton("yes", (p1, p2) -> {
+//                    //add to database on another thread
+                        Executor thread = Executors.newSingleThreadExecutor();
+                        /*this runs in another thread*/
+                        thread.execute(() -> {
+                            for (SongList song : songCollect) {
+                                if (song.songTitle.equals(songTitleToDelete)) {
+                                    sDAO.deleteMessage(song);
+                                    break; // Exit loop after finding and deleting the song
+                                }
+                            }
+                            runOnUiThread(() -> {
+                                Intent returnIntent = new Intent(SongDetail.this, CollectionList.class);
+                                startActivity(returnIntent);
+                                finish(); // Close the current activity
+
+                            });
+                        });
+                    });
+                    builder.create().show(); //this has to be last
+
+
+//
+                break;
+
+            case R.id.item_2:
+
+
+
+                    Intent intent2 = new Intent(SongDetail.this, CollectionList.class);
+
+                    startActivity(intent2);
+
+
+
+
+                break;
+        }
+        return true;
+    }
+}

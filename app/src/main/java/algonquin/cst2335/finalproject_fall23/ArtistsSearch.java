@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.ColumnInfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import algonquin.cst2335.finalproject_fall23.databinding.ActivityArtistsSearchBinding;
+import algonquin.cst2335.finalproject_fall23.databinding.ActivitySongDetailBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.CollectionListBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.SongListBinding;
 
@@ -125,6 +127,8 @@ public class ArtistsSearch extends AppCompatActivity {
                                                                 response2.getJSONArray(
                                                                         "data");
 
+                                                        // Outside the for-loop, declare an array to hold savedImagePath
+                                                        final String[] savedImagePath = new String[1];
 
                                                         for (int i = 0; i < 50; i++) {
                                                             JSONObject songObject = dataArray.getJSONObject(i);
@@ -135,37 +139,44 @@ public class ArtistsSearch extends AppCompatActivity {
                                                                     albumObject.getString("title");
                                                             String md5_image = albumObject.getString("md5_image");
 
-                                                            String imageURL = "//e-cdns-images.dzcdn" +
+                                                            String imageURL = "http://e-cdns-images.dzcdn" +
                                                                     ".net/images/cover/" + md5_image + "/250x250" +
-                                                                    "-000000-80-0-0.jpg";
-                                                            File coverPicture = new File(getFilesDir() + "/" + albumName + ".jpg");
+                                                                    "-000000" +
+                                                                    "-80-0-0" +
+                                                                    ".jpg";
+                                                            File imageView =
+                                                                    new File(getFilesDir() + "/" + md5_image + ".jpg");
 
 
-                                                            if (coverPicture.exists()) {
-                                                                Bitmap theImage = BitmapFactory.decodeFile(coverPicture.getAbsolutePath());
-                                                                //? binding.coverPicture.setImageBitmap(theImage);
+
+                                                            if (imageView.exists()) {
+                                                                Bitmap theImage= BitmapFactory.decodeFile(imageView.getAbsolutePath());
+                                                                binding.imageView.setImageBitmap(theImage);
+                                                                binding.imageView.setVisibility(View.VISIBLE);
+
                                                             } else {
+
                                                                 ImageRequest imgReq =
                                                                         new ImageRequest(imageURL,
                                                                                 bitmap -> {
-                                                                                    // binding album cover
-//                                                    binding.coverPicture.setImageBitmap(bitmap);
-//                                                    binding.coverPicture.setVisibility(View.VISIBLE);
-//                                                        save the icon to the device
-
-                                                                                    try (FileOutputStream fOut = openFileOutput(albumName + ".jpg", Context.MODE_PRIVATE)) {
-                                                                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                                                                                        // Update the image view with 'bitmap' if needed.
+                                                                                    binding.imageView.setImageBitmap(bitmap);
+                                                                                    binding.imageView.setVisibility(View.VISIBLE);
 
 
+
+                                                                                    try (  FileOutputStream fOut= openFileOutput(md5_image + ".jpg", Context.MODE_PRIVATE)) {
+                                                                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                                                                                         fOut.flush();
 
 
-                                                                                        fOut.close();
+
                                                                                     } catch (
                                                                                             IOException e) {
-                                                                                        Log.e("MainActivity", "Saving image failed: " + e.getMessage());
+                                                                                        Log.e("ArtistSearch", "Saving image failed: " + e.getMessage());
                                                                                     }
+
+
+
                                                                                 }, 1024, 1024, ImageView.ScaleType.FIT_CENTER, null,
                                                                                 error -> Log.e("MainActivity", "Image request error: " + error.getMessage())
                                                                         );
@@ -174,13 +185,12 @@ public class ArtistsSearch extends AppCompatActivity {
 
                                                             // Create SongList object and add to the list
                                                             SongList song =
-                                                                    new SongList(userInput, songTitle, duration, albumName);
-
+                                                                    new SongList(userInput, songTitle, duration, albumName, savedImagePath[0]);
 
                                                             artistSongs.add(song);
-                                                        }
-                                                        myAdapter.notifyDataSetChanged();
 
+                                                        myAdapter.notifyDataSetChanged();
+                                                    }
                                                     } catch (JSONException e) {
                                                         Log.e("ArtistSearch",
                                                                 "JSON " +
@@ -229,20 +239,20 @@ public class ArtistsSearch extends AppCompatActivity {
 
 
                         View.OnClickListener clickListener = view -> {
-                            String clickedText = view.getTag().toString();
-
-                            // Show a Toast message
 
 
                             Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
                             intent.putExtra("artistName", song.artist);
-                            intent.putExtra("songTitle", clickedText);
+                            intent.putExtra("songTitle",  song.songTitle);
+                            intent.putExtra("imageFilePath", song.imageURL);
+                            intent.putExtra("duration", song.duration);
+                            intent.putExtra("albumName", song.albumName);
+                            intent.putExtra("Collection", song.Collection);
 
-                            intent.putExtra("albumCover", "app_icon");
                             startActivity(intent);
                         };
 
-                        //  holder.artistName.setOnClickListener(clickListener);
+
                         holder.songName.setOnClickListener(clickListener);
 
 

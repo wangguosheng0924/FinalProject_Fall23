@@ -4,7 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 
-@Database(entities = {SongList.class}, version = 1)
+@Database(entities = {SongList.class}, version = 2)
 public abstract class PersonalSongListData extends RoomDatabase {
 
 

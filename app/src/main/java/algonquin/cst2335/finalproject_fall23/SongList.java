@@ -34,27 +34,30 @@ public class SongList {
     @ColumnInfo(name = "Collection")
     public String Collection;
 
-
+    @ColumnInfo(name = "imageURL")
+    public String imageURL;
     public SongList() {
     }
 
     public SongList(String artistN, String song,
-                    int du, String aN) {
+                    int du, String aN,String url) {
         artist = artistN;
         songTitle=song;
 
         duration=du;
         albumName=aN;
         Collection="my collection";
+        imageURL=url;
     }
 
     public SongList(String artistN, String song,
-                    int du, String aN,String CL) {
+                    int du, String aN,String CL,String url) {
         artist = artistN;
         songTitle=song;
         duration=du;
         albumName=aN;
         Collection=CL;
+        imageURL=url;
     }
 
 
