@@ -56,6 +56,7 @@ public class ArtistsSearch extends AppCompatActivity {
     String songTitle;
 
     int ArtistID;
+    String imageId;
 
     String albumCover;
 
@@ -87,86 +88,116 @@ public class ArtistsSearch extends AppCompatActivity {
         //Listener
         binding.searchButton.setOnClickListener(click -> {
             String userInput = binding.textInput.getText().toString();
-
             SharedPreferences pref = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putString("lastSearch", userInput);
             editor.apply();
 
-            binding.artistName.setText("Here are the songs of: " + userInput);
+            binding.artistName.setText("Songs of: " + userInput);
             binding.artistName.setVisibility(View.VISIBLE);
 
-            Toast.makeText(ArtistsSearch.this, "Click song tile to check " +
+            Toast.makeText(ArtistsSearch.this, "Click song to check " +
                             "the details",
                     Toast.LENGTH_SHORT).show();
 
             // First API Request
 
             try {
-                artist = URLEncoder.encode(userInput, "UTF-8");
-                String stringURL = "https://api.deezer.com/search/artist/?q=" + artist;
+                String stringURL = "https://api.deezer.com/search/artist/?q=" + URLEncoder.encode(userInput, "UTF-8");
+
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                         stringURL, null,
                         response -> {
                             try {
-
                                 JSONObject start = response.getJSONArray(
                                         "data").getJSONObject(0);
                                 ArtistID = start.getInt("id");
 
+                                // Second API Request
                                 String artistStringURL = "https://api.deezer.com/artist/" + ArtistID +
                                         "/top?limit=50";
 
-//nested request
-                                JsonObjectRequest request2 =
-                                        new JsonObjectRequest(Request.Method.GET, artistStringURL, null,
-                                                response2 -> {
-                                                    try {
+                                    JsonObjectRequest request2 =
+                                            new JsonObjectRequest(Request.Method.GET, artistStringURL, null,
+                                                    response2 -> {
+                                                        try {
 
-                                                        JSONArray dataArray =
-                                                                response2.getJSONArray(
-                                                                        "data");
+                                                            JSONArray dataArray =
+                                                                    response2.getJSONArray(
+                                                                            "data");
 
-
-
-                                                        for (int i = 0; i < 50; i++) {
-                                                            JSONObject songObject = dataArray.getJSONObject(i);
-                                                            songTitle = songObject.getString("title");
-                                                            duration = songObject.getInt("duration");
-                                                            JSONObject albumObject = songObject.getJSONObject("album");
-                                                            albumName =
-                                                                    albumObject.getString("title");
-                                                            String md5_image = albumObject.getString("md5_image");
+                                                            for (int i = 0; i < 50; i++) {
+                                                                JSONObject songObject = dataArray.getJSONObject(i);
+                                                                songTitle = songObject.getString("title");
+                                                                duration = songObject.getInt("duration");
+                                                                JSONObject albumObject = songObject.getJSONObject("album");
+                                                                albumName = albumObject.getString("title");
+                                                                imageId = albumObject.getString("md5_image");
 
 
+                                                                String imageURL = "https://e-cdns" +
+                                                                        "-images" +
+                                                                        ".dzcdn" +
+                                                                        ".net" +
+                                                                        "/images" +
+                                                                        "/artist/" + imageId + "/250x250-000000-80-0-0.jpg";
+                                                                File coverImage =
+                                                                        new File(getFilesDir() + "/" + imageId);
+                                                                if (coverImage.exists()) {
+                                                                    Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
+
+                                                                } else {
+                                                                    ImageRequest imgReq =
+                                                                            new ImageRequest(imageURL,
+                                                                                    bitmap -> {
 
 
+                                                                                        try {
+                                                                                            FileOutputStream fOut = openFileOutput(imageId + ".jpg", Context.MODE_PRIVATE);
+
+                                                                                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                                                                                            fOut.flush();
+                                                                                            fOut.close();
+                                                                                        } catch (
+                                                                                                IOException e) {
+                                                                                            throw new RuntimeException(e);
+                                                                                        }
+                                                                                    }, 1024, 1024,
+                                                                                    ImageView.ScaleType.FIT_CENTER, null, (error) -> {
+                                                                                Log.e("ImageSave", "Image request error: " + error.getMessage());
+                                                                            });
+                                                                    queue.add(imgReq);
 
 
-                                                            // Create SongList object and add to the list
-                                                            SongList song =
-                                                                    new SongList(userInput, songTitle, duration, albumName,md5_image );
+                                                                }
 
-                                                            artistSongs.add(song);
+                                                                // Create SongList object and add to the list
+                                                                SongList song =
+                                                                        new SongList(userInput, songTitle, duration, albumName, imageId);
 
-                                                        myAdapter.notifyDataSetChanged();
-                                                    }
-                                                    } catch (JSONException e) {
-                                                        Log.e("ArtistSearch",
-                                                                "JSON " +
-                                                                        "parsing error: " + e.getMessage());
-                                                    }
-                                                },
-                                                error -> Log.e("ArtistSearch", "Volley error: " + error.getMessage())
-                                        );
-                                queue.add(request2);
+                                                                artistSongs.add(song);
+                                                                runOnUiThread(() -> {
+                                                                    myAdapter.notifyDataSetChanged();
+                                                                });
+                                                            }
+                                                        } catch (
+                                                                JSONException e) {
+                                                            Log.e("ArtistSearch",
+                                                                    "JSON " +
+                                                                            "parsing error: " + e.getMessage());
+                                                        }
+                                                    },
+                                                    error -> Log.e("ArtistSearch", "Volley error: " + error.getMessage())
+                                            );
+                                    queue.add(request2);
 
-                            } catch (JSONException e) {
+
+                                 } catch (JSONException e) {
                                 e.printStackTrace(); // Handle JSON parsing error
                             }
                         },
                         error -> {
-                            // Handle error
+                            Log.e("ArtistSearch", "Volley error: " + error.getMessage());
                         });
 
                 queue.add(request);
