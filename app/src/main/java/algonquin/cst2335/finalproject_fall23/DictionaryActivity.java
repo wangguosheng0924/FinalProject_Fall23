@@ -27,12 +27,15 @@ import androidx.room.Room;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +55,7 @@ import retrofit2.Response;
 
 public class DictionaryActivity extends AppCompatActivity {
     DictionaryactivityMainBinding binding;
-    ArrayList<String> definitions; //<definition>
+    ArrayList<Definition> definitionsLocal; //<definition>
     DefinitionViewModel definitionModel;
     DefinitionDAO mDAO;
     RecyclerView.Adapter myAdapter;
@@ -73,21 +76,23 @@ public class DictionaryActivity extends AppCompatActivity {
         SharedPreferences prefs1 = getSharedPreferences("searchTerm", Context.MODE_PRIVATE);
         searchEditText.setText(prefs1.getString("searchTerm", ""));
 
+        // create a volley object that will connect to a server
+        //This part goes at the top of the onCreate function:
+        queue = Volley.newRequestQueue(this);
         //open a database
         DefinitionDB db = Room.databaseBuilder(getApplicationContext(), DefinitionDB.class, "databaseLocal").build();
         mDAO = db.cmDAO();
         //definition initialization
         definitionModel = new ViewModelProvider(this).get(DefinitionViewModel.class);
-        if(definitionModel.definitions.getValue()!=null){
-            definitions =definitionModel.definitions.getValue();}
-        else{definitions = new ArrayList<>();
+        if(definitionModel.definitionsLocal.getValue()!=null){
+            definitionsLocal =definitionModel.definitionsLocal.getValue();}
+        else{definitionsLocal = new ArrayList<>();
         }
 
         //search button:
         Button searchButton = findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> {
             String searchTerm = binding.editText.getText().toString();
-            definitions.add(searchTerm);
 
             // save the last searched term
             SharedPreferences prefs2 = getSharedPreferences("searchTerm", Context.MODE_PRIVATE);
@@ -95,35 +100,39 @@ public class DictionaryActivity extends AppCompatActivity {
             editor.putString("searchTerm", searchTerm);
             editor.apply();
 
-            myAdapter.notifyItemInserted(definitions.size() - 1);
+            myAdapter.notifyItemInserted(definitionsLocal.size() - 1);
 
             // use volley to retrieve data form the server
-            String stringURL = " https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
+            String stringURL = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, stringURL, null,
                     (response) -> {
                         //get the data back from the response
                         int size = response.length();
                         for(int i = 0; i<size; i++){
                             try {
-                                JSONObject definition = response.getJSONObject(String.valueOf(i));
-                                JSONArray meanings = definition.getJSONArray("meanings");
+                                JSONObject entry = response.getJSONObject(i);
+                                JSONArray meanings = entry.getJSONArray("meanings");
+
                                 for (int j = 0; j< meanings.length(); j++){
                                     JSONObject meaning = meanings.getJSONObject(j);
                                     JSONArray definitions = meaning.getJSONArray("definitions");
+
                                     for(int k = 0; k< definitions.length(); k++){
                                         JSONObject obj= definitions.getJSONObject(k);
                                         String def = obj.getString("definition");
-                                        def.length();
+                                       // new a Definition database object and add this object to the local database
+                                        Definition definitionFromAPI = new Definition(searchTerm, def);
+                                        definitionsLocal.add(definitionFromAPI);
                                     }
+                                    myAdapter.notifyDataSetChanged();
                                 }
                             } catch (JSONException e){
                                 throw new RuntimeException(e);
                             }
-                        }
+                        }// end of the outer for
                         // locate the textView and setText in the textView
-
-                    },
+                    }, // end of response()
                     error -> {
                     }
             );// end of JsonObjectRequest
@@ -158,14 +167,17 @@ public class DictionaryActivity extends AppCompatActivity {
             @Override
             //adapter is like a bridge to bind data into the viewholder-myrowholder in the recyclerview.
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                holder.searched_term.setText(holder.searched_term.getText());
-                holder.def1.setText(holder.def1.getText());
-                holder.def2.setText(holder.def2.getText());
-                holder.def3.setText(holder.def3.getText());
+                Definition currentDefinition = definitionsLocal.get(position);
+                holder.searched_term.setText(currentDefinition.getTerm());
+                holder.def1.setText(currentDefinition.getDefinition());
+
+//                holder.searched_term.setText(holder.searched_term.getText());
+//                holder.def1.setText(holder.def1.getText());
+
             }
             @Override
             public int getItemCount() {
-                return definitions != null ? definitions.size() : 0;
+                return definitionsLocal != null ? definitionsLocal.size() : 0;
             }
         });// end of setAdapter
 
@@ -202,31 +214,30 @@ public class DictionaryActivity extends AppCompatActivity {
     class MyRowHolder extends RecyclerView.ViewHolder {
         TextView searched_term;
         TextView def1;
-        TextView def2;
-        TextView def3;
+//        TextView def2;
+//        TextView def3;
         //String definition;
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
             searched_term=itemView.findViewById(R.id.searched_term);
             // 实现你的数据集合以及创建和绑定视图项的逻辑
             def1=itemView.findViewById(R.id.def1);
-            def2=itemView.findViewById(R.id.def2);
-            def3=itemView.findViewById(R.id.def3);
+//            def2=itemView.findViewById(R.id.def2);
+//            def3=itemView.findViewById(R.id.def3);
 
             itemView.setOnClickListener(clk -> {
                 int position = getAdapterPosition();
-                String selectedTerm = definitions.get(position);
+                Definition selectedTerm = definitionsLocal.get(position);
                 definitionModel.selectedDefinition.postValue(selectedTerm);
                 AlertDialog.Builder builder = new AlertDialog.Builder( DictionaryActivity.this );
-                builder.setMessage("Do you want to delete the message:"+ selectedTerm);
+                builder.setMessage("Do you want to delete the message:"+ selectedTerm.getTerm());
                 builder.setTitle("Question:");
                 builder.setNegativeButton("No",(dialog,cl)->{});
                 builder.setPositiveButton("Yes",(dialog,cl)->{
-                    String  selectedDefinition = definitions.get(position);
-                    definitions.remove(position);
+                    definitionsLocal.remove(position);
                     myAdapter.notifyItemRemoved(position);
                     Snackbar.make(searched_term,"You deleted message #"+ position, Snackbar.LENGTH_LONG).setAction("Undo", click->{
-                        definitions.add(position, selectedDefinition);
+                        definitionsLocal.add(position, selectedTerm);
                         myAdapter.notifyItemInserted(position);
                     }).show();
                 });

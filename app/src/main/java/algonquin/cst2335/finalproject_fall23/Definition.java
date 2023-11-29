@@ -19,8 +19,7 @@ public class Definition {
 
     public Definition(){}
 
-    Definition(int id,String term,String definition){
-        this.id=id;
+    Definition(String term,String definition){
         this.term=term;
         this.definition=definition;
     }
