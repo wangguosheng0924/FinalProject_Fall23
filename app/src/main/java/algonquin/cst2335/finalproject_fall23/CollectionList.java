@@ -172,18 +172,23 @@ public class CollectionList extends AppCompatActivity {
             view.setOnClickListener(click -> {
                 int position = getAbsoluteAdapterPosition();//which row this is
 
-                if (position != RecyclerView.NO_POSITION) {
-                    selectedRow = position;
+
+
                     SongList selectedSong = songCollect.get(position);
 
                                 // Action to show details
                                 Intent intent = new Intent(CollectionList.this, SongDetail.class);
                                 intent.putExtra("SONG_TITLE", selectedSong.songTitle);
-                                intent.putExtra("ARTIST_NAME", selectedSong.artist);
-                                intent.putExtra("DURATION", selectedSong.duration);
-                                intent.putExtra("ALBUM_NAME", selectedSong.albumName);
+
+                    intent.putExtra("SONG_TITLE", selectedSong.songTitle);
+                    intent.putExtra("ARTIST_NAME", selectedSong.artist);
+                    intent.putExtra("DURATION", String.valueOf(selectedSong.duration)); // Ensure duration is passed as String
+                    intent.putExtra("ALBUM_NAME", selectedSong.albumName);
+                    intent.putExtra("COLLECTION", selectedSong.Collection);
+                    intent.putExtra("IMAGE_URL", selectedSong.imageURL); // Make sure imageURL is properly set in SongList object
+                    startActivity(intent);
                                 startActivity(intent);
-                            }
+
 
 
 

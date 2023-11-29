@@ -70,7 +70,61 @@ public class SongDetail extends AppCompatActivity {
         sDAO = db.cmDAO();//get a DAO object to interact with database
 
 
+
+
         Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String songTitle = extras.getString("SONG_TITLE", "Default Song");
+            String artistName = extras.getString("ARTIST_NAME", "Default Artist");
+            String duration = extras.getString("DURATION", "0");
+            String albumName = extras.getString("ALBUM_NAME", "");
+            String collection = extras.getString("COLLECTION", "");
+          String imageURL = extras.getString("IMAGE_URL", "");
+
+            binding.songTitle.setText(songTitle);
+            binding.artistName.setText(artistName);
+            binding.duration.setText(duration);
+            binding.albumName.setText(albumName);
+            binding.collection.setText(collection);
+            //save image
+              imageURL =
+                      "https://e-cdns-images.dzcdn.net/images/artist/" + imageFilePath + "/250x250-000000-80-0-0.jpg";
+
+
+            File coverImage = new File(getFilesDir() + "/" + imageFilePath);
+            if (coverImage.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
+                binding.albumCover.setImageBitmap(bitmap);
+            } else {
+                ImageRequest imgReq =
+                        new ImageRequest(imageURL,
+                                bitmap -> {
+                                    binding.albumCover.setImageBitmap(bitmap);
+
+
+                                    FileOutputStream fOut = null;
+                                    try {
+                                        fOut =
+                                                openFileOutput(imageFilePath + ".jpg", Context.MODE_PRIVATE);
+
+                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                                        fOut.flush();
+                                        fOut.close();
+                                    } catch (
+                                            IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }, 1024, 1024,
+                                ImageView.ScaleType.FIT_CENTER, null, (error) -> {
+                            Log.e("MainActivity", "Image request error: " + error.getMessage());
+                        });
+                queue.add(imgReq);
+
+                //  image download
+            }
+
+        }
+
         imageFilePath = extras.getString("imageURL", "");
         binding.songTitle.setText(extras.getString("songTitle", "Default Song"));
         binding.artistName.setText(extras.getString("artistName", "Default Artist"));
