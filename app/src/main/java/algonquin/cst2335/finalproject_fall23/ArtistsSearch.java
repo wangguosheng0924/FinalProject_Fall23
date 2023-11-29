@@ -247,10 +247,6 @@ public class ArtistsSearch extends AppCompatActivity {
 
                         View.OnClickListener clickListener = view -> {
 
-
-
-
-
                             // Now start the SongDetail activity
                             Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
                             intent.putExtra("artistName", song.artist);
