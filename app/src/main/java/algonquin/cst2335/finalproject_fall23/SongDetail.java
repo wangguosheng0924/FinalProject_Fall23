@@ -44,7 +44,7 @@ public class SongDetail extends AppCompatActivity {
 
     TextView albumName;
     TextView collection;
-    String albumCoverName ;
+
     Button saveButton;
 
     String imageFilePath;
@@ -67,7 +67,17 @@ public class SongDetail extends AppCompatActivity {
         sDAO = db.cmDAO();//get a DAO object to interact with database
 
 
+  /*Bundle extras = getIntent().getExtras();
 
+
+File imgFile = new File(imageFilePath);
+if (imgFile.exists()) {
+    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+    binding.albumCover.setImageBitmap(myBitmap);
+} else {
+    binding.albumCover.setImageResource(R.drawable.default_icon); // Replace 'default_icon' with your drawable resource name
+}
+*/
 
 
         Bundle extras = getIntent().getExtras();
@@ -79,16 +89,17 @@ public class SongDetail extends AppCompatActivity {
             binding.albumName.setText(extras.getString("albumName", ""));
             binding.collection.setText(extras.getString("Collection", ""));
 
-
-            File imgFile = new File(imageFilePath);
+        String imageId = extras.getString("imageURL", "");
+            File imgFile =   new File(getFilesDir() + "/" + imageId+".jpg");
             if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imageFilePath);
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
                 binding.albumCover.setImageBitmap(myBitmap);
 
 
 
             } else {
-                Log.e("LoadImage", "Image file not found: " + imageFilePath);
+                binding.albumCover.setImageResource(R.drawable.app_icon);
             }
 
 
