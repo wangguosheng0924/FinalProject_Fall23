@@ -42,13 +42,7 @@ public class SongDetail extends AppCompatActivity {
     ArrayList<SongList> songCollect = null;
 
     ActivitySongDetailBinding binding;
-    TextView songTitle;
 
-
-    TextView artistName;
-
-    TextView albumName;
-    TextView collection;
 
     Button saveButton;
 
@@ -78,26 +72,25 @@ public class SongDetail extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         imageFilePath = extras.getString("imageURL", "");
-        binding.songTitle.setText("Song Title: " + extras.getString(  "songTitle", "Default Song"));
-        binding.artistName.setText("Artist Name: " + extras.getString(  "artistName", "Default Artist"));
+        binding.songTitle.setText(extras.getString("songTitle", "Default Song"));
+        binding.artistName.setText(extras.getString("artistName", "Default Artist"));
         int duration = extras.getInt("duration", 0); // Defaulting to 0 if no value is found
-        binding.duration.setText("Duration: " + String.valueOf(duration));
+        binding.duration.setText(String.valueOf(duration));
 
 
-        binding.albumName.setText("Album: " + extras.getString("albumName", ""));
+        binding.albumName.setText(extras.getString("albumName", ""));
         binding.collection.setText(extras.getString("Collection", ""));
 
 
-
-       //save image
+        //save image
         String imageURL = "https://e-cdns-images.dzcdn.net/images/artist/" + imageFilePath + "/250x250-000000-80-0-0.jpg";
 
 
-        File coverImage = new File(getFilesDir()+ "/" + imageFilePath);
+        File coverImage = new File(getFilesDir() + "/" + imageFilePath);
         if (coverImage.exists()) {
-                                    Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
-                                    binding.albumCover.setImageBitmap(bitmap);
-                                } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
+            binding.albumCover.setImageBitmap(bitmap);
+        } else {
             ImageRequest imgReq =
                     new ImageRequest(imageURL,
                             bitmap -> {
@@ -137,18 +130,18 @@ public class SongDetail extends AppCompatActivity {
 
 
         binding.saveButton.setOnClickListener(click -> {
+            String userInput = binding.collection.getText().toString();
 
-            // Assuming you have artistName and songTitle TextViews
-
-            String artistN = artistName.getText().toString();
-            String song = songTitle.getText().toString();
-            String aN = albumName.getText().toString();
+            String artistN = binding.artistName.getText().toString();
+            String song = binding.songTitle.getText().toString();
+            String aN = binding.albumName.getText().toString();
             int du = Integer.parseInt(binding.duration.getText().toString());
 
 
             // Create a SongList object
             SongList thisSong = new SongList(artistN, song,
-                    du, aN, imageFilePath);
+                    du, aN, userInput,imageFilePath);
+
 
             songCollect.add(thisSong);
             // Database insertion on a background thread
@@ -184,7 +177,7 @@ public class SongDetail extends AppCompatActivity {
             case R.id.item_1:
 
 
-                String songTitleToDelete = songTitle.getText().toString();
+                String songTitleToDelete = binding.songTitle.getText().toString();
                 AlertDialog.Builder builder =
                         new AlertDialog.Builder(SongDetail.this);
 

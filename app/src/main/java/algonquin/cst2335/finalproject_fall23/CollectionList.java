@@ -32,6 +32,7 @@ public class CollectionList extends AppCompatActivity {
     RecyclerView.Adapter myAdapter;
     SongListDAO sDAO;
     ActivityCollectionListBinding binding;
+
     ArrayList<SongList> songCollect;
 
     int selectedRow;
@@ -52,9 +53,7 @@ public class CollectionList extends AppCompatActivity {
 
 
 
-                        CollectionListBinding binding =
-                                CollectionListBinding.inflate(getLayoutInflater(), parent, false);
-
+                        CollectionListBinding binding = CollectionListBinding.inflate(getLayoutInflater(), parent, false);
                         return new ViewHolder(binding.getRoot());
 
 
@@ -67,9 +66,9 @@ public class CollectionList extends AppCompatActivity {
 
                         holder.songTitle.setText(song.songTitle);
                         holder.artistName.setText(song.artist);
-                        holder.duration.setText(song.duration);
+                        holder.duration.setText(String.valueOf(song.duration));
                         holder.albumName.setText(song.albumName);
-
+                        holder.collection.setText(song.Collection);
 
                     }
 
@@ -154,15 +153,21 @@ public class CollectionList extends AppCompatActivity {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView songTitle, artistName, duration, albumName; // and other
+        TextView songTitle, artistName, duration, albumName,collection; // and other
         // TextViews
 
         public ViewHolder(View view) {
             super(view);
-            songTitle = view.findViewById(R.id.songTitle);
-            artistName = view.findViewById(R.id.artistName);
-            duration = view.findViewById(R.id.duration);
-            albumName = view.findViewById(R.id.albumName);
+
+            CollectionListBinding binding = CollectionListBinding.bind(view);
+
+
+            songTitle= binding.songTitle;
+
+            collection=binding.collection;
+            artistName =binding.artistName;
+            duration=binding.duration;
+            albumName = binding.albumName;
 
             view.setOnClickListener(click -> {
                 int position = getAbsoluteAdapterPosition();//which row this is
