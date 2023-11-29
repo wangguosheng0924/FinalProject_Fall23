@@ -133,66 +133,66 @@ public class ArtistsSearch extends AppCompatActivity {
                                                             JSONObject albumObject = songObject.getJSONObject("album");
                                                             albumName = albumObject.getString("title");
                                                             imageId = albumObject.getString("md5_image");
+                                                            Log.d(
+                                                                    "imageIdChange", "imageIdatFor: " + imageId);
+                                                            Log.d(
+                                                                    "songTitleChange", "imageIdatFor: " + songTitle);
 
+//                                                            String imageURL =
+//                                                                    "https://e-cdns" +
+//                                                                            "-images" +
+//                                                                            ".dzcdn" +
+//                                                                            ".net" +
+//                                                                            "/images" +
+//                                                                            "/artist/" + imageId + "/250x250-000000-80-0-0.jpg";
+//                                                            File coverImage =
+//                                                                    new File(getFilesDir() + "/" + imageId + ".jpg");
+//                                                            if (!coverImage.exists()) {
+//                                                                ImageRequest imgReq =
+//                                                                        new ImageRequest(imageURL,
+//                                                                                bitmap -> {
+//
+//
+//                                                                                    try {
+//                                                                                        FileOutputStream fOut = openFileOutput(imageId + ".jpg", Context.MODE_PRIVATE);
+//
+//                                                                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+//// After saving, get the file path
+//                                                                                        fOut.close();
+//
+//                                                                                        File file = getFileStreamPath(imageId + ".jpg");
+//
+//                                                                                        Log.d("FileSavePath", "Image saved at: " +  file.getAbsolutePath());
+//
+//
+//
+//                                                                                    } catch (
+//                                                                                            IOException e) {
+//                                                                                        throw new RuntimeException(e);
+//                                                                                    }
+//                                                                                }, 1024, 1024,
+//                                                                                ImageView.ScaleType.FIT_CENTER, null, (error) -> {
+//                                                                            Log.e("ImageSaveNov", "Image request error: " + error.getMessage());
+//                                                                        });
+//                                                                queue.add(imgReq);
+//
+//
+//                                                            }
 
-                                                            String imageURL = "https://e-cdns" +
-                                                                    "-images" +
-                                                                    ".dzcdn" +
-                                                                    ".net" +
-                                                                    "/images" +
-                                                                    "/artist/" + imageId + "/250x250-000000-80-0-0.jpg";
-                                                            File coverImage =
-                                                                    new File(getFilesDir() + "/" + imageId+".jpg");
-                                                            if (coverImage.exists()) {
-                                                                Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
-
-                                                            } else {
-                                                                ImageRequest imgReq =
-                                                                        new ImageRequest(imageURL,
-                                                                                bitmap -> {
-
-
-                                                                                    try {
-                                                                                        FileOutputStream fOut = openFileOutput(imageId + ".jpg", Context.MODE_PRIVATE);
-
-                                                                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-// After saving, get the file path
-
-
-                                                                                        fOut.flush();
-                                                                                        fOut.close();
-
-                                                                                        File savedFile = getFileStreamPath(imageId + ".jpg");
-                                                                                        if (savedFile.exists()) {
-                                                                                            // File exists and is saved successfully
-                                                                                            String absolutePath = savedFile.getAbsolutePath();
-                                                                                            Log.d("ImageNewSave", "Image saved at: " + absolutePath);
-                                                                                        } else {
-                                                                                            // File not saved
-                                                                                            Log.e("ImageNewSave", "Failed to save image");
-                                                                                        }
-                                                                                    } catch (
-                                                                                            IOException e) {
-                                                                                        throw new RuntimeException(e);
-                                                                                    }
-                                                                                }, 1024, 1024,
-                                                                                ImageView.ScaleType.FIT_CENTER, null, (error) -> {
-                                                                            Log.e("ImageSave", "Image request error: " + error.getMessage());
-                                                                        });
-                                                                queue.add(imgReq);
-
-
-                                                            }
-
-                                                            // Create SongList object and add to the list
-                                                            SongList song =
-                                                                    new SongList(userInput, songTitle, duration, albumName, imageId);
-
-                                                            artistSongs.add(song);
                                                             runOnUiThread(() -> {
+                                                                // Create SongList object and add to the list
+                                                                SongList song =
+                                                                        new SongList(userInput, songTitle, duration, albumName, imageId);
+
+                                                                Log.d(
+                                                                        "imageIdChange", "imageIdatconstructor: " + song.imageURL);
+
+                                                                artistSongs.add(song);
+
                                                                 myAdapter.notifyDataSetChanged();
                                                             });
-                                                        }
+
+                                                        }// for loop
                                                     } catch (
                                                             JSONException e) {
                                                         Log.e("ArtistSearch",
@@ -208,12 +208,15 @@ public class ArtistsSearch extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace(); // Handle JSON parsing error
                             }
+
+
                         },
                         error -> {
                             Log.e("ArtistSearch", "Volley error: " + error.getMessage());
                         });
 
                 queue.add(request);
+
 
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace(); // Handle UnsupportedEncodingException
@@ -243,6 +246,12 @@ public class ArtistsSearch extends AppCompatActivity {
 
 
                         View.OnClickListener clickListener = view -> {
+
+
+
+
+
+                            // Now start the SongDetail activity
                             Intent intent = new Intent(ArtistsSearch.this, SongDetail.class);
                             intent.putExtra("artistName", song.artist);
                             intent.putExtra("songTitle", song.songTitle);
@@ -250,6 +259,11 @@ public class ArtistsSearch extends AppCompatActivity {
                             intent.putExtra("duration", song.duration);
                             intent.putExtra("albumName", song.albumName);
                             intent.putExtra("Collection", song.Collection);
+
+                            Log.d("passSongInfo",
+                                    "songTitle saved as: " + song.songTitle);
+                            Log.d("passSongInfo",
+                                    "imageURL saved as: " + song.imageURL);
 
 
                             startActivity(intent);
