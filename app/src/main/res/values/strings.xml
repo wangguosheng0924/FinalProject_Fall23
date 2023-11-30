@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">FinalProject_Fall23</string>
-    <string name="dictionary_title">Dictionary</string>
-    <string name="search_definition">search definition</string>
     <string name="search_button">Search</string>
+    <string name="app_name">Final Project</string>
+    <string name="dictionary_title">Dictionary</string>
+    <string name="search_definition">Search Definition</string>
     <string name="save_button">Save</string>
-    <string name="history_button">Review History</string>
+    <string name="history_button">ViewHistory</string>
 </resources>
