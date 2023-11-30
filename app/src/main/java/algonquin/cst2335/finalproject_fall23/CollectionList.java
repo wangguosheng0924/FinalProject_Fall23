@@ -52,7 +52,6 @@ public class CollectionList extends AppCompatActivity {
                     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-
                         CollectionListBinding binding = CollectionListBinding.inflate(getLayoutInflater(), parent, false);
                         return new ViewHolder(binding.getRoot());
 
@@ -83,46 +82,6 @@ public class CollectionList extends AppCompatActivity {
 
         binding.songRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        binding.deleteButton.setOnClickListener(click -> {
-//
-//            SongList selected = songCollect.get( selectedRow);
-//            AlertDialog.Builder builder =
-//                    new AlertDialog.Builder(CollectionList.this);
-//
-//            builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
-//            builder.setMessage("Do you want to delete this song?");
-//            builder.setTitle("Delete");
-//
-//
-//            builder.setPositiveButton("yes", (p1, p2) -> {
-////                    //add to database on another thread
-//                Executor thread = Executors.newSingleThreadExecutor();
-//                /*this runs in another thread*/
-//                thread.execute(() -> {
-//                    sDAO.deleteMessage(selected);//get the id from
-////                    });
-//                    songCollect.remove(selectedRow);//remove from the array list
-//                    myAdapter.notifyDataSetChanged();//redraw the list
-////
-//
-//                    Snackbar.make(binding.deleteButton, "You deleted the row", Snackbar.LENGTH_LONG)
-//                            .setAction("Undo", (btn) -> {
-//                                Executor thread2 = Executors.newSingleThreadExecutor();
-//                                thread2.execute(() -> {
-//                                    sDAO.insertMessage(selected);
-//                                });
-////
-////
-//                                songCollect.add(selectedRow, selected);
-//                                myAdapter.notifyDataSetChanged();//redraw the list
-//                            })
-//                            .show();
-//
-//                });
-//                builder.create().show(); //this has to be last
-//
-//            });
-//        });
     }
 
     ;
@@ -153,7 +112,7 @@ public class CollectionList extends AppCompatActivity {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView songTitle, artistName, duration, albumName,collection; // and other
+        TextView songTitle, artistName, duration, albumName, collection; // and other
         // TextViews
 
         public ViewHolder(View view) {
@@ -162,36 +121,33 @@ public class CollectionList extends AppCompatActivity {
             CollectionListBinding binding = CollectionListBinding.bind(view);
 
 
-            songTitle= binding.songTitle;
+            songTitle = binding.songTitle;
 
-            collection=binding.collection;
-            artistName =binding.artistName;
-            duration=binding.duration;
+            collection = binding.collection;
+            artistName = binding.artistName;
+            duration = binding.duration;
             albumName = binding.albumName;
 
             view.setOnClickListener(click -> {
                 int position = getAbsoluteAdapterPosition();//which row this is
 
 
+                SongList selectedSong = songCollect.get(position);
 
-                    SongList selectedSong = songCollect.get(position);
-
-                                // Action to show details
-                                Intent intent = new Intent(CollectionList.this, SongDetail.class);
-                                intent.putExtra("SONG_TITLE", selectedSong.songTitle);
-
-
-                    intent.putExtra("songTitle", selectedSong.songTitle);
-                    intent.putExtra("artistName", selectedSong.artist);
-                    intent.putExtra("duration",
-                            String.valueOf(selectedSong.duration));
-                    intent.putExtra("albumName", selectedSong.albumName);
-                    intent.putExtra("Collection", selectedSong.Collection);
-                    intent.putExtra("imageURL", selectedSong.imageURL); // Make sure imageURL is properly set in SongList object
-                    startActivity(intent);
-                                startActivity(intent);
+                // Action to show details
+                Intent intent = new Intent(CollectionList.this, SongDetail.class);
+                intent.putExtra("SONG_TITLE", selectedSong.songTitle);
 
 
+                intent.putExtra("songTitle", selectedSong.songTitle);
+                intent.putExtra("artistName", selectedSong.artist);
+                intent.putExtra("duration",
+                        String.valueOf(selectedSong.duration));
+                intent.putExtra("albumName", selectedSong.albumName);
+                intent.putExtra("Collection", selectedSong.Collection);
+                intent.putExtra("imageURL", selectedSong.imageURL); // Make sure imageURL is properly set in SongList object
+                startActivity(intent);
+                startActivity(intent);
 
 
             });
