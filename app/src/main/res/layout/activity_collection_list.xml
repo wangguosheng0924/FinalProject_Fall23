@@ -35,8 +35,8 @@ android:background="@color/musicBackground"
 
     <FrameLayout
         android:id="@+id/fragmentLocation"
-        android:layout_width="409dp"
-        android:layout_height="331dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

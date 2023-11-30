@@ -54,10 +54,8 @@ public class CollectionList extends AppCompatActivity {
         Toast.makeText(this, "Scroll down to see more songs", Toast.LENGTH_LONG).show();
 
 
-
-        frameLayout =binding.fragmentLocation;
+        frameLayout = binding.fragmentLocation;
         frameLayout.setVisibility(View.GONE);
-
 
 
         myAdapter =
@@ -82,8 +80,6 @@ public class CollectionList extends AppCompatActivity {
                         holder.artistName.setText(song.artist);
 
 
-
-
                     }
 
 
@@ -96,7 +92,8 @@ public class CollectionList extends AppCompatActivity {
         binding.songRecyclerView.setAdapter(myAdapter);
         //get data from ViewModel
         songModel = new ViewModelProvider(this).get(SongViewModel.class);
-        songModel.selectedMessage.observe(this, newSelected -> {CollectionDetailsFragment newFragment = new CollectionDetailsFragment(newSelected);
+        songModel.selectedMessage.observe(this, newSelected -> {
+            CollectionDetailsFragment newFragment = new CollectionDetailsFragment(newSelected);
             //to load fragments
             getSupportFragmentManager().beginTransaction().addToBackStack("").add(R.id.fragmentLocation, newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
 
@@ -104,10 +101,9 @@ public class CollectionList extends AppCompatActivity {
         binding.songRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+    }
 
-
-
-    };
+    ;
 
     private void initializeDatabaseAndLoadData() {
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
@@ -142,12 +138,18 @@ public class CollectionList extends AppCompatActivity {
             super(view);
 
             CollectionListBinding binding = CollectionListBinding.bind(view);
-Switch toggle=binding.switchControl;
+            Switch toggle = binding.switchControl;
             if (toggle != null) {
                 toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
                         // Show the FrameLayout
                         frameLayout.setVisibility(View.VISIBLE);
+
+                        int position = getAbsoluteAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            SongList selectedSong = songCollect.get(position);
+                            songModel.selectedMessage.setValue(selectedSong); // Update the ViewModel
+                        }
                     } else {
                         // Hide the FrameLayout
                         frameLayout.setVisibility(View.GONE);
@@ -162,8 +164,6 @@ Switch toggle=binding.switchControl;
             artistName = binding.artistName;
 
 
-
-
             view.setOnClickListener(click -> {
                 int position = getAbsoluteAdapterPosition();//which row this is
 
@@ -173,8 +173,6 @@ Switch toggle=binding.switchControl;
                 // Action to show details
                 Intent intent = new Intent(CollectionList.this, SongDetail.class);
                 intent.putExtra("SONG_TITLE", selectedSong.songTitle);
-
-
                 intent.putExtra("songTitle", selectedSong.songTitle);
                 intent.putExtra("artistName", selectedSong.artist);
                 intent.putExtra("duration",
