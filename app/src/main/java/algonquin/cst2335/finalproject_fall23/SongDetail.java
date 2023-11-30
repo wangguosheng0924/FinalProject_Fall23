@@ -43,9 +43,6 @@ public class SongDetail extends AppCompatActivity {
 
     ActivitySongDetailBinding binding;
 
-
-    Button saveButton;
-
     String imageFilePath;
 
     protected RequestQueue queue = null;
@@ -58,72 +55,70 @@ public class SongDetail extends AppCompatActivity {
         setSupportActionBar(binding.myToolbar);
 
         queue = Volley.newRequestQueue(this);
-
         songCollect = new ArrayList<>();
+
         //load messages from the database:
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
                         PersonalSongListData.class,
                         "file")
                 .fallbackToDestructiveMigration()
                 .build();
-
         sDAO = db.cmDAO();//get a DAO object to interact with database
 
-
-
-
+//
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String songTitle = extras.getString("SONG_TITLE", "Default Song");
-            String artistName = extras.getString("ARTIST_NAME", "Default Artist");
-            String duration = extras.getString("DURATION", "0");
-            String albumName = extras.getString("ALBUM_NAME", "");
-            String collection = extras.getString("COLLECTION", "");
-          String imageURL = extras.getString("IMAGE_URL", "");
-
-            binding.songTitle.setText(songTitle);
-            binding.artistName.setText(artistName);
-            binding.duration.setText(duration);
-            binding.albumName.setText(albumName);
-            binding.collection.setText(collection);
-            //save image
-              imageURL =
-                      "https://e-cdns-images.dzcdn.net/images/artist/" + imageFilePath + "/250x250-000000-80-0-0.jpg";
-
-
-            File coverImage = new File(getFilesDir() + "/" + imageFilePath);
-            if (coverImage.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
-                binding.albumCover.setImageBitmap(bitmap);
-            } else {
-                ImageRequest imgReq =
-                        new ImageRequest(imageURL,
-                                bitmap -> {
-                                    binding.albumCover.setImageBitmap(bitmap);
-
-
-                                    FileOutputStream fOut = null;
-                                    try {
-                                        fOut =
-                                                openFileOutput(imageFilePath + ".jpg", Context.MODE_PRIVATE);
-
-                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                                        fOut.flush();
-                                        fOut.close();
-                                    } catch (
-                                            IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }, 1024, 1024,
-                                ImageView.ScaleType.FIT_CENTER, null, (error) -> {
-                            Log.e("MainActivity", "Image request error: " + error.getMessage());
-                        });
-                queue.add(imgReq);
-
-                //  image download
-            }
-
-        }
+//        if (extras != null) {
+//            String songTitle = extras.getString("SONG_TITLE", "Default Song");
+//            String artistName = extras.getString("ARTIST_NAME", "Default Artist");
+//
+//            Executor thread = Executors.newSingleThreadExecutor();
+//            thread.execute(() -> {
+//                // Fetch songs from the database that match the songTitle and artistName
+//                List<SongList> matchingSongs = sDAO.getMessagesBySongAndArtist(songTitle, artistName);
+//
+//                SongList song = matchingSongs.get(0);
+//                runOnUiThread(() -> {
+//                    binding.songTitle.setText(song.songTitle);
+//                    binding.artistName.setText(song.artist);
+//                    binding.duration.setText(String.valueOf(song.duration));
+//                    binding.albumName.setText(song.albumName);
+//                    binding.collection.setText(song.Collection);
+//
+//                    String imageURL = "https://e-cdns-images.dzcdn.net/images/artist/" + song.imageURL + "/250x250-000000-80-0-0.jpg";
+//
+//
+//                    File coverImage = new File(getFilesDir() + "/" + imageFilePath);
+//                    if (coverImage.exists()) {
+//                        Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
+//                        binding.albumCover.setImageBitmap(bitmap);
+//                    } else {
+//                        ImageRequest imgReq =
+//                                new ImageRequest(imageURL,
+//                                        bitmap -> {
+//                                            binding.albumCover.setImageBitmap(bitmap);
+//
+//
+//                                            FileOutputStream fOut = null;
+//                                            try {
+//                                                fOut =
+//                                                        openFileOutput(imageFilePath + ".jpg", Context.MODE_PRIVATE);
+//
+//                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+//                                                fOut.flush();
+//                                                fOut.close();
+//                                            } catch (
+//                                                    IOException e) {
+//                                                throw new RuntimeException(e);
+//                                            }
+//                                        }, 1024, 1024,
+//                                        ImageView.ScaleType.FIT_CENTER, null, (error) -> {
+//                                    Log.e("MainActivity", "Image request error: " + error.getMessage());
+//                                });
+//                        queue.add(imgReq);
+//                    }
+//                });
+//            });
+//        }
 
         imageFilePath = extras.getString("imageURL", "");
         binding.songTitle.setText(extras.getString("songTitle", "Default Song"));
@@ -174,7 +169,9 @@ public class SongDetail extends AppCompatActivity {
 
 
         Executor thread2 = Executors.newSingleThreadExecutor();
-        thread2.execute(() -> {
+        thread2.execute(() ->
+
+        {
             List<SongList> fromDatabase = sDAO.getAllMessages();//return a List
             songCollect.addAll(fromDatabase);//this adds all messages from the database
 
@@ -182,8 +179,10 @@ public class SongDetail extends AppCompatActivity {
 
         //end of loading from database
 
+        // Set up the save button click listener
+        binding.saveButton.setOnClickListener(click ->
 
-        binding.saveButton.setOnClickListener(click -> {
+        {
             String userInput = binding.collection.getText().toString();
 
             String artistN = binding.artistName.getText().toString();
@@ -194,7 +193,7 @@ public class SongDetail extends AppCompatActivity {
 
             // Create a SongList object
             SongList thisSong = new SongList(artistN, song,
-                    du, aN, userInput,imageFilePath);
+                    du, aN, userInput, imageFilePath);
 
 
             songCollect.add(thisSong);

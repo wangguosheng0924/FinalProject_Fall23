@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-@Entity //mapping variables to columns
+@Entity
 public class SongList {
 
     @PrimaryKey(autoGenerate = true)
@@ -22,8 +22,6 @@ public class SongList {
 
     @ColumnInfo(name = "songTitle")
     public String songTitle;
-
-
 
     @ColumnInfo(name = "duration")
     public int duration;
