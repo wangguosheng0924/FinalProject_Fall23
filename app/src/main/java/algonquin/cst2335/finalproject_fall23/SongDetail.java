@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,7 +39,8 @@ import algonquin.cst2335.finalproject_fall23.databinding.ActivitySongDetailBindi
 
 public class SongDetail extends AppCompatActivity {
     SongListDAO sDAO;
-
+    private MediaPlayer mediaPlayer;
+    String preview;
     ArrayList<SongList> songCollect = null;
 
     ActivitySongDetailBinding binding;
@@ -67,66 +69,13 @@ public class SongDetail extends AppCompatActivity {
 
 //
         Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            String songTitle = extras.getString("SONG_TITLE", "Default Song");
-//            String artistName = extras.getString("ARTIST_NAME", "Default Artist");
-//
-//            Executor thread = Executors.newSingleThreadExecutor();
-//            thread.execute(() -> {
-//                // Fetch songs from the database that match the songTitle and artistName
-//                List<SongList> matchingSongs = sDAO.getMessagesBySongAndArtist(songTitle, artistName);
-//
-//                SongList song = matchingSongs.get(0);
-//                runOnUiThread(() -> {
-//                    binding.songTitle.setText(song.songTitle);
-//                    binding.artistName.setText(song.artist);
-//                    binding.duration.setText(String.valueOf(song.duration));
-//                    binding.albumName.setText(song.albumName);
-//                    binding.collection.setText(song.Collection);
-//
-//                    String imageURL = "https://e-cdns-images.dzcdn.net/images/artist/" + song.imageURL + "/250x250-000000-80-0-0.jpg";
-//
-//
-//                    File coverImage = new File(getFilesDir() + "/" + imageFilePath);
-//                    if (coverImage.exists()) {
-//                        Bitmap bitmap = BitmapFactory.decodeFile(coverImage.getAbsolutePath());
-//                        binding.albumCover.setImageBitmap(bitmap);
-//                    } else {
-//                        ImageRequest imgReq =
-//                                new ImageRequest(imageURL,
-//                                        bitmap -> {
-//                                            binding.albumCover.setImageBitmap(bitmap);
-//
-//
-//                                            FileOutputStream fOut = null;
-//                                            try {
-//                                                fOut =
-//                                                        openFileOutput(imageFilePath + ".jpg", Context.MODE_PRIVATE);
-//
-//                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-//                                                fOut.flush();
-//                                                fOut.close();
-//                                            } catch (
-//                                                    IOException e) {
-//                                                throw new RuntimeException(e);
-//                                            }
-//                                        }, 1024, 1024,
-//                                        ImageView.ScaleType.FIT_CENTER, null, (error) -> {
-//                                    Log.e("MainActivity", "Image request error: " + error.getMessage());
-//                                });
-//                        queue.add(imgReq);
-//                    }
-//                });
-//            });
-//        }
 
         imageFilePath = extras.getString("imageURL", "");
         binding.songTitle.setText(extras.getString("songTitle", "Default Song"));
         binding.artistName.setText(extras.getString("artistName", "Default Artist"));
         int duration = extras.getInt("duration", 0); // Defaulting to 0 if no value is found
         binding.duration.setText(String.valueOf(duration));
-
-
+        preview = extras.getString("preview", "Default");
         binding.albumName.setText(extras.getString("albumName", ""));
         binding.collection.setText(extras.getString("Collection", ""));
 
@@ -193,7 +142,7 @@ public class SongDetail extends AppCompatActivity {
 
             // Create a SongList object
             SongList thisSong = new SongList(artistN, song,
-                    du, aN, userInput, imageFilePath);
+                    du, aN, userInput, imageFilePath, preview);
 
 
             songCollect.add(thisSong);
@@ -211,6 +160,36 @@ public class SongDetail extends AppCompatActivity {
         });
 
 
+        //play song
+        Button playButton = findViewById(R.id.playButton);
+        playButton.setOnClickListener(v -> playSong());
+    }
+
+    private void playSong() {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(preview);
+                mediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+                mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        } else {
+            mediaPlayer.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        //play song
     }
 
     ;

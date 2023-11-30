@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_corners">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/myToolbar"
@@ -36,9 +37,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/artistName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/albumCover"
-        app:layout_constraintVertical_bias="0.489" />
+        app:layout_constraintVertical_bias="0.547" />
 
     <TextView
         android:id="@+id/artistName"
@@ -95,5 +97,20 @@
         app:layout_constraintBottom_toBottomOf="@+id/saveButton"
         app:layout_constraintEnd_toStartOf="@+id/saveButton"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/playButton"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#5BE18E8E"
+        android:text="play"
+        app:icon="@android:drawable/ic_media_play"
+        app:layout_constraintBottom_toBottomOf="@+id/albumCover"
+        app:layout_constraintEnd_toEndOf="@+id/albumCover"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/albumCover"
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

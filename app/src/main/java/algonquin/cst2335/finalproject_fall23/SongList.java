@@ -34,11 +34,15 @@ public class SongList {
 
     @ColumnInfo(name = "imageURL")
     public String imageURL;
+
+    @ColumnInfo(name = "preview")
+    public String preview;
+
     public SongList() {
     }
 
     public SongList(String artistN, String song,
-                    int du, String aN,String url) {
+                    int du, String aN,String url,String pre ) {
         artist = artistN;
         songTitle=song;
 
@@ -46,16 +50,18 @@ public class SongList {
         albumName=aN;
         Collection="my collection";
         imageURL=url;
+        preview=pre;
     }
 
     public SongList(String artistN, String song,
-                    int du, String aN,String CL,String url) {
+                    int du, String aN,String CL,String url,String pre) {
         artist = artistN;
         songTitle=song;
         duration=du;
         albumName=aN;
         Collection=CL;
         imageURL=url;
+        preview=pre;
     }
 
 
