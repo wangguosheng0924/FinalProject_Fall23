@@ -44,7 +44,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import algonquin.cst2335.finalproject_fall23.databinding.DictionaryactivityMainBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.PostsearchlayoutBinding;
@@ -55,7 +59,9 @@ import retrofit2.Response;
 
 public class DictionaryActivity extends AppCompatActivity {
     DictionaryactivityMainBinding binding;
-    ArrayList<Definition> definitionsLocal; //<definition>
+
+    PostsearchlayoutBinding binding1;
+    ArrayList<Definition> definitionsLocal;
     DefinitionViewModel definitionModel;
     DefinitionDAO mDAO;
     RecyclerView.Adapter myAdapter;
@@ -109,8 +115,10 @@ public class DictionaryActivity extends AppCompatActivity {
                     (response) -> {
                         //get the data back from the response
                         int size = response.length();
+                        definitionsLocal.clear();
                         for(int i = 0; i<size; i++){
                             try {
+//                                definitionsLocal.clear();
                                 JSONObject entry = response.getJSONObject(i);
                                 JSONArray meanings = entry.getJSONArray("meanings");
 
@@ -143,12 +151,59 @@ public class DictionaryActivity extends AppCompatActivity {
         //save button: should I put this definitions as <string> or <definition>?
         Button saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener(clk->{
-            Definition newDefinition = new Definition();
+            String word_to_save = binding1.searchedTerm.getText().toString();
+            String definitions_to_save= binding1.def1.getText().toString();
+            Definition word_definition_to_save = new Definition(word_to_save,definitions_to_save);
+            //insert word_definition_to_save to arraylist<definition>
+            definitionsLocal.add(word_definition_to_save);
+            myAdapter.notifyItemInserted(definitionsLocal.size()-1);
+            //insert word_definition_to_save to database
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(()->{
+                mDAO.insertDefinition(word_definition_to_save);
+                Log.d("TAG","The word and definition saved is:" + word_definition_to_save);
+            });
+
+
         });
 
         //history button:
          Button historyButton= findViewById(R.id.history_button);
          historyButton.setOnClickListener(clk->{
+             String saved_word;
+             //ArrayList<String> saved_word_list = new ArrayList<>();
+             Set<String> saved_word_set = new HashSet<>();
+
+             if(definitionsLocal == null)
+                 {
+                     definitionModel.definitionsLocal.setValue(definitionsLocal = new ArrayList<>());
+
+                     Executor thread = Executors.newSingleThreadExecutor();
+                     thread.execute(() ->
+                     {
+                         definitionsLocal.addAll( mDAO.getAllDefinitions() ); //Once you get the data from database
+//                         runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
+                     });
+                 }
+             for (Definition item : definitionsLocal) {
+
+                 saved_word = item.getTerm();
+                 //saved_word_list.add(saved_word);
+                 saved_word_set.add(saved_word);
+
+            }
+             // Convert the Set to a List if necessary
+             ArrayList<String> saved_word_list = new ArrayList<>(saved_word_set);
+
+             // Create a new instance of the HistoryFragment and pass the saved_word_list
+             HistoryFragment historyFragment = new HistoryFragment(saved_word_list);
+
+             // Replace the current fragment with the HistoryFragment
+             getSupportFragmentManager().beginTransaction()
+                     .replace(R.id.frameLayout, historyFragment)
+                     .addToBackStack(null)
+                     .commit();
+
 
          });
         // set a Linear layout manager as the layout manager for the recycleView.
@@ -161,7 +216,7 @@ public class DictionaryActivity extends AppCompatActivity {
             @Override
             //adapter is like a bridge to create a new view-myrowholder
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                PostsearchlayoutBinding binding1 = PostsearchlayoutBinding.inflate(getLayoutInflater());
+                binding1 = PostsearchlayoutBinding.inflate(getLayoutInflater());
                 return new MyRowHolder(binding1.getRoot()); // put binding1 into this viewHolder for items.
             }
             @Override
