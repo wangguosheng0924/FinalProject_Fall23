@@ -97,8 +97,8 @@
             android:id="@+id/frameLayout"
             android:layout_width="156dp"
             android:layout_height="391dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="52dp"
+            android:layout_marginBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
