@@ -8,8 +8,17 @@
          />
     <item
         android:id="@+id/item_1"
-        android:icon="@android:drawable/ic_menu_delete"
+
 
         android:title="remove"
+        />
+
+    <item
+        android:id="@+id/item_3"
+        android:title="Help"
+
+
+
+        android:icon="@drawable/helper"
         app:showAsAction="always" />
 </menu>

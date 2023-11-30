@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.ColumnInfo;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -38,6 +41,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import algonquin.cst2335.finalproject_fall23.databinding.ActivityArtistsSearchBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.ActivitySongDetailBinding;
@@ -59,7 +64,7 @@ public class ArtistsSearch extends AppCompatActivity {
     String imageId;
 
     String albumCover;
-String preview;
+    String preview;
     int duration;
     String albumName;
 
@@ -72,6 +77,7 @@ String preview;
 
         binding = ActivityArtistsSearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setSupportActionBar(binding.firstToolbar);
 
 
         SharedPreferences prefs = getSharedPreferences("ArtistSearchPrefs", MODE_PRIVATE);
@@ -133,13 +139,14 @@ String preview;
                                                             JSONObject albumObject = songObject.getJSONObject("album");
                                                             albumName = albumObject.getString("title");
                                                             imageId = songObject.getString("md5_image");
-                                                            preview=songObject.getString("preview");;
+                                                            preview = songObject.getString("preview");
+                                                            ;
 
 
                                                             runOnUiThread(() -> {
                                                                 // Create SongList object and add to the list
                                                                 SongList song =
-                                                                        new SongList(userInput, songTitle, duration, albumName, imageId,preview);
+                                                                        new SongList(userInput, songTitle, duration, albumName, imageId, preview);
 
                                                                 Log.d(
                                                                         "imageIdChange", "imageIdatconstructor: " + song.imageURL);
@@ -200,6 +207,7 @@ String preview;
                         SongList song = artistSongs.get(position);
 
                         holder.songName.setText(song.songTitle);
+                        holder.duration.setText(String.valueOf(song.duration));
 
 
                         View.OnClickListener clickListener = view -> {
@@ -240,14 +248,54 @@ String preview;
     class MyRowHolder extends RecyclerView.ViewHolder {
 
 
-        TextView songName;
+        TextView songName, duration;
 
 
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
             songName = itemView.findViewById(R.id.songName);
-
+            duration = itemView.findViewById(R.id.duration);
 
         }
+    }
+
+    @Override //initialize the toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.first_menu, menu);
+        return true;
+
+    }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+
+            case R.id.item_2:
+
+
+                Intent intent2 = new Intent(ArtistsSearch.this, CollectionList.class);
+
+                startActivity(intent2);
+
+
+                break;
+
+            case R.id.item_1:
+
+                AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(this);
+                helpDialogBuilder.setTitle("How to Use");
+                helpDialogBuilder.setMessage("Enter the full name of an " +
+                        "artist and press 'Search' to view their top 50 songs" +
+                        ".\n\n Click on a song title for detailed information " +
+                        "about the song.");
+                helpDialogBuilder.setPositiveButton("OK", null);
+                helpDialogBuilder.show();
+
+                break;
+        }
+        return true;
     }
 }

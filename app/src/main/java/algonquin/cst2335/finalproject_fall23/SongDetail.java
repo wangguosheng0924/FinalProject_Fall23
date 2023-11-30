@@ -149,6 +149,8 @@ public class SongDetail extends AppCompatActivity {
 
 
             songCollect.add(thisSong);
+
+
             // Database insertion on a background thread
             Executor thread3 = Executors.newSingleThreadExecutor();
             thread3.execute(() -> {
@@ -158,8 +160,7 @@ public class SongDetail extends AppCompatActivity {
 
             });
 
-            Toast.makeText(SongDetail.this, "Song saved!",
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(binding.saveButton, "Song saved!", Snackbar.LENGTH_SHORT).show();
         });
 
 
@@ -255,6 +256,16 @@ public class SongDetail extends AppCompatActivity {
 
 
                 break;
+            case R.id.item_3:
+            AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(this);
+            helpDialogBuilder.setTitle("How to Use");
+            helpDialogBuilder.setMessage("Enter your collection name to build" +
+                    " your library and hit 'Add' to save songs. \n\nUse the " +
+                    "toolbar button to remove a song or view your existing collections.");
+            helpDialogBuilder.setPositiveButton("OK", null);
+            helpDialogBuilder.show();
+
+            break;
         }
         return true;
     }

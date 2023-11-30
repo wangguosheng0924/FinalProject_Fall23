@@ -13,6 +13,8 @@ import androidx.room.Room;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -48,7 +50,7 @@ public class CollectionList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCollectionListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        setSupportActionBar(binding.myToolbar);
         songCollect = new ArrayList<>();
 
         Toast.makeText(this, "Scroll down to see more songs", Toast.LENGTH_LONG).show();
@@ -187,7 +189,44 @@ public class CollectionList extends AppCompatActivity {
             });
         }
     }
+    @Override //initialize the toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
+        getMenuInflater().inflate(R.menu.last_menu, menu);
+        return true;
+
+    }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+
+            case R.id.item_2:
+
+
+                Intent intent2 = new Intent(CollectionList.this, ArtistsSearch.class);
+
+                startActivity(intent2);
+
+
+                break;
+
+            case R.id.item_1:
+
+                AlertDialog.Builder helpDialogBuilder = new AlertDialog.Builder(this);
+                helpDialogBuilder.setTitle("How to Use");
+                helpDialogBuilder.setMessage("Toggle the switch for more song" +
+                        " info. \n\nUse the toolbar button to search for " +
+                        "artists. \n\nClick on a song title to see its details.");
+                helpDialogBuilder.setPositiveButton("OK", null);
+                helpDialogBuilder.show();
+
+                break;
+        }
+        return true;
+    }
 
 }
 
