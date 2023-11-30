@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="110dp">
 
     <TextView
         android:id="@+id/songTitle"
@@ -20,103 +20,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/narrative1" />
 
+
+    <TextView
+        android:id="@+id/narrative1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="From Collection:"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/songTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.461" />
+
     <TextView
         android:id="@+id/artistName"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="68dp"
+        android:layout_marginEnd="180dp"
         android:text="artist name"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.309"
-        app:layout_constraintStart_toEndOf="@+id/narrative3"
-        app:layout_constraintTop_toBottomOf="@+id/collection" />
-
-    <TextView
-        android:id="@+id/duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="duration"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/narrative4"
-        app:layout_constraintStart_toStartOf="@+id/albumName" />
-
-    <TextView
-        android:id="@+id/albumName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="album Name"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/narrative2"
-        app:layout_constraintStart_toStartOf="@+id/artistName"
-        tools:ignore="MissingConstraints" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="188dp" />
-
-    <TextView
-        android:id="@+id/collection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="TextView"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.412"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
-
-    <TextView
-        android:id="@+id/narrative1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="From Collection:"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/collection"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/songTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/narrative3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="From Artist"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/artistName"
-        app:layout_constraintStart_toStartOf="@+id/songTitle"
-        app:layout_constraintTop_toBottomOf="@+id/songTitle"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/narrative2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
-        android:text="From Album:"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/narrative3" />
-
-    <TextView
-        android:id="@+id/narrative4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Duration:"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/narrative2" />
+        tools:layout_editor_absoluteY="65dp" />
 
     <View
         android:id="@+id/separatorLine"
@@ -131,6 +59,16 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
+
+    <Switch
+        android:id="@+id/switchControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        app:layout_constraintBottom_toTopOf="@+id/songTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.792"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

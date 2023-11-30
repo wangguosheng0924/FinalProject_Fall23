@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -14,6 +15,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,17 +36,29 @@ public class CollectionList extends AppCompatActivity {
     SongListDAO sDAO;
     ActivityCollectionListBinding binding;
 
-    ArrayList<SongList> songCollect;
+    SongViewModel songModel;
 
+    ArrayList<SongList> songCollect;
+    FrameLayout frameLayout;
     int selectedRow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        songCollect = new ArrayList<>();
         binding = ActivityCollectionListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        songCollect = new ArrayList<>();
+
         Toast.makeText(this, "Scroll down to see more songs", Toast.LENGTH_LONG).show();
+
+
+
+        frameLayout =binding.fragmentLocation;
+        frameLayout.setVisibility(View.GONE);
+
+
 
         myAdapter =
                 new RecyclerView.Adapter<ViewHolder>() {
@@ -65,9 +80,9 @@ public class CollectionList extends AppCompatActivity {
 
                         holder.songTitle.setText(song.songTitle);
                         holder.artistName.setText(song.artist);
-                        holder.duration.setText(String.valueOf(song.duration));
-                        holder.albumName.setText(song.albumName);
-                        holder.collection.setText(song.Collection);
+
+
+
 
                     }
 
@@ -79,12 +94,20 @@ public class CollectionList extends AppCompatActivity {
                 };//populate the list
         initializeDatabaseAndLoadData();
         binding.songRecyclerView.setAdapter(myAdapter);
+        //get data from ViewModel
+        songModel = new ViewModelProvider(this).get(SongViewModel.class);
+        songModel.selectedMessage.observe(this, newSelected -> {CollectionDetailsFragment newFragment = new CollectionDetailsFragment(newSelected);
+            //to load fragments
+            getSupportFragmentManager().beginTransaction().addToBackStack("").add(R.id.fragmentLocation, newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
 
+        });
         binding.songRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    }
 
-    ;
+
+
+
+    };
 
     private void initializeDatabaseAndLoadData() {
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
@@ -119,14 +142,27 @@ public class CollectionList extends AppCompatActivity {
             super(view);
 
             CollectionListBinding binding = CollectionListBinding.bind(view);
-
-
+Switch toggle=binding.switchControl;
+            if (toggle != null) {
+                toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        // Show the FrameLayout
+                        frameLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        // Hide the FrameLayout
+                        frameLayout.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                Log.e("ArtistsSearch", "Switch not found in the layout");
+            }
             songTitle = binding.songTitle;
 
-            collection = binding.collection;
+
             artistName = binding.artistName;
-            duration = binding.duration;
-            albumName = binding.albumName;
+
+
+
 
             view.setOnClickListener(click -> {
                 int position = getAbsoluteAdapterPosition();//which row this is

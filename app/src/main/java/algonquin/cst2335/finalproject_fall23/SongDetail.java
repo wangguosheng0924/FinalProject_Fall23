@@ -2,6 +2,7 @@ package algonquin.cst2335.finalproject_fall23;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.app.AlertDialog;
@@ -41,6 +42,7 @@ public class SongDetail extends AppCompatActivity {
     SongListDAO sDAO;
     private MediaPlayer mediaPlayer;
     String preview;
+
     ArrayList<SongList> songCollect = null;
 
     ActivitySongDetailBinding binding;
@@ -101,6 +103,7 @@ public class SongDetail extends AppCompatActivity {
                                             openFileOutput(imageFilePath + ".jpg", Context.MODE_PRIVATE);
 
                                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                                    fOut.flush();
                                     fOut.flush();
                                     fOut.close();
                                 } catch (
