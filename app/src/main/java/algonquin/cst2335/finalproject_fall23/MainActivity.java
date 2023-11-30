@@ -42,5 +42,10 @@ public class MainActivity extends AppCompatActivity {
         binding.songBtton.setOnClickListener( click -> {
             startActivity(new Intent(this,ArtistsSearch.class));
         });
+
+        binding.recipeButton.setOnClickListener( click -> {
+            startActivity(new Intent(this,RecipeMain.class));
+        });
+
     }
 }

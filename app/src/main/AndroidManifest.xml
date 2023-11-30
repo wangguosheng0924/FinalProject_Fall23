@@ -20,6 +20,10 @@
             android:exported="false" />
         <activity
             android:name=".SongDetail"
+
+            android:exported="false" />
+        <activity
+
             android:name=".RecipeMain"
             android:exported="false" />
         <activity
