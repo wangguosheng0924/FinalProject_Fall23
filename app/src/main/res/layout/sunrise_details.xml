@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeSunrise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The sunrise time is "/>
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeSunset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The sunset time is "/>
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeFirstLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The first_light time is "/>
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeLastLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The last_light time is "/>
+
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeDawn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The dawn time is "/>
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeDusk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The dusk time is "/>
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeSolarNoon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The solar_noon time is "/>
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/timeGoldenHour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The golden_hour time is "/>
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/dayLength"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The day_length is "/>
+
+</LinearLayout>
