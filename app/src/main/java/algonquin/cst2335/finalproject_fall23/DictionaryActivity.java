@@ -198,7 +198,7 @@ public class DictionaryActivity extends AppCompatActivity {
              // Create a new instance of the HistoryFragment and pass the saved_word_list
              HistoryFragment historyFragment = new HistoryFragment(saved_word_list);
 
-             // Replace the current fragment with the HistoryFragment
+             // Replace the current layout with the HistoryFragment
              getSupportFragmentManager().beginTransaction()
                      .replace(R.id.frameLayout, historyFragment)
                      .addToBackStack(null)
