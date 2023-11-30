@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">FinalProject_Fall23</string>
+    <string name="searchHint">eg. Taylor Swift </string>
+    <string name="library">"我的音乐收藏夹 "</string>
+    <string name="artistName">歌手：</string>
+    <string name="about">查看：</string>
+    <string name="album">专辑：</string>
+    <string name="duration">"  时长：:"</string>
+    <string name="collection">来自收藏：</string>
+    <string name="search">"  搜索"</string>
+    <string name="welcome">欢迎进入我的音乐引擎</string>
+    <string name="add">"  添加"</string>
+    <string name="myCollection">我的收藏夹</string>
+    <string name="play">播放</string>
+</resources>

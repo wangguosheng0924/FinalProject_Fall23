@@ -49,28 +49,57 @@ import algonquin.cst2335.finalproject_fall23.databinding.ActivitySongDetailBindi
 import algonquin.cst2335.finalproject_fall23.databinding.CollectionListBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.SongListBinding;
 
+/**
+ * The ArtistsSearch activity allows users to search for artists and view their top songs.
+ * @author Lei Luo
+ * @version 1.1
+ */
 public class ArtistsSearch extends AppCompatActivity {
 
+    /** Binding instance for ActivityArtistsSearch. */
     ActivityArtistsSearchBinding binding;
-    ArrayList<SongList> artistSongs = null;
+
+    /** List to hold songs of a searched artist. */
+    ArrayList<SongList> artistSongs;
+
+    /** Name of the artist being searched. */
     String artist;
+
+    /** Adapter for the RecyclerView to display songs. */
     RecyclerView.Adapter myAdapter;
 
+    /** ViewModel for managing song data. */
     SongViewModel songModel;
 
+    /** Title of the current song. */
     String songTitle;
 
+    /** ID of the artist. */
     int ArtistID;
+
+    /** ID used for the image associated with the song. */
     String imageId;
 
+    /** Cover image of the album. */
     String albumCover;
+
+    /** Preview URL of the song. */
     String preview;
+
+    /** Duration of the song in seconds. */
     int duration;
+
+    /** Name of the album. */
     String albumName;
 
+    /** RequestQueue for network requests. */
     protected RequestQueue queue;
 
-
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -245,6 +274,9 @@ public class ArtistsSearch extends AppCompatActivity {
 
     }
 
+    /**
+     * Represents a ViewHolder for a song item in the RecyclerView.
+     */
     class MyRowHolder extends RecyclerView.ViewHolder {
 
 
@@ -259,6 +291,13 @@ public class ArtistsSearch extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which items are placed.
+     * @return You must return true for the menu to be displayed; if you return false, it will not be shown.
+     */
+
     @Override //initialize the toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -268,6 +307,12 @@ public class ArtistsSearch extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Called whenever an item in your options menu is selected.
+     * @param item The menu item that was selected.
+     * @return Return false to allow normal menu processing to proceed; return true to consume it here.
+     */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {

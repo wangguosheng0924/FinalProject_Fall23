@@ -32,18 +32,38 @@ import java.util.concurrent.Executors;
 import algonquin.cst2335.finalproject_fall23.databinding.ActivityCollectionListBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.CollectionListBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.SongListBinding;
-
+/**
+ * The CollectionList activity provides functionality to display a list of songs in a collection
+ * @author Lei Luo
+  * @version 1.1
+ */
 public class CollectionList extends AppCompatActivity {
+    /** Adapter for the RecyclerView to display songs. */
     RecyclerView.Adapter myAdapter;
+
+    /** Data Access Object for the song list. */
     SongListDAO sDAO;
+
+    /** View Binding for the Activity. */
     ActivityCollectionListBinding binding;
 
+    /** ViewModel for managing song data. */
     SongViewModel songModel;
 
+    /** ArrayList to hold the collection of songs. */
     ArrayList<SongList> songCollect;
+
+    /** FrameLayout used to display song details. */
     FrameLayout frameLayout;
+
+    /** Holds the position of the selected row. */
     int selectedRow;
 
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -103,10 +123,10 @@ public class CollectionList extends AppCompatActivity {
         binding.songRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-    }
-
-    ;
-
+    };
+    /**
+     * Initializes the Room database and loads data.
+     */
     private void initializeDatabaseAndLoadData() {
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
                         PersonalSongListData.class,
@@ -130,7 +150,9 @@ public class CollectionList extends AppCompatActivity {
         });
 
     }
-
+    /**
+     * ViewHolder class for RecyclerView items.
+     */
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView songTitle, artistName, duration, albumName, collection; // and other
@@ -189,6 +211,12 @@ public class CollectionList extends AppCompatActivity {
             });
         }
     }
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; if false, it will not be shown.
+     */
     @Override //initialize the toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -198,6 +226,11 @@ public class CollectionList extends AppCompatActivity {
 
     }
 
+    /**
+     * Called whenever an item in your options menu is selected.
+     * @param item The menu item that was selected.
+     * @return false to allow normal menu processing to proceed; true to consume it here.
+     */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {

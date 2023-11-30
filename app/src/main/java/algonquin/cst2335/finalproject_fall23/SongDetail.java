@@ -37,20 +37,37 @@ import java.util.concurrent.Executors;
 import java.util.zip.Inflater;
 
 import algonquin.cst2335.finalproject_fall23.databinding.ActivitySongDetailBinding;
-
+/**
+ * SongDetail activity displays detailed information about a specific song and allows users to save or delete the song from their collection.
+ * @author Lei Luo
+ * @version 1.1
+ */
 public class SongDetail extends AppCompatActivity {
+    /** DAO for accessing the song list in the database. */
     SongListDAO sDAO;
+
+    /** MediaPlayer for playing song previews. */
     private MediaPlayer mediaPlayer;
+
+    /** URL for the song preview. */
     String preview;
 
-    ArrayList<SongList> songCollect = null;
+    /** Collection of songs. */
+    ArrayList<SongList> songCollect;
 
+    /** View Binding for this activity. */
     ActivitySongDetailBinding binding;
 
+    /** File path for the song's image. */
     String imageFilePath;
 
-    protected RequestQueue queue = null;
+    /** Queue for handling network requests. */
+    protected RequestQueue queue;
 
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down, this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +186,10 @@ public class SongDetail extends AppCompatActivity {
         playButton.setOnClickListener(v -> playSong());
     }
 
+    /**
+     * Initializes playing the song preview.
+     */
+
     private void playSong() {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
@@ -186,6 +207,11 @@ public class SongDetail extends AppCompatActivity {
         }
     }
 
+
+
+    /**
+     * Releases resources used by the MediaPlayer.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -194,10 +220,13 @@ public class SongDetail extends AppCompatActivity {
             mediaPlayer = null;
         }
         //play song
-    }
+    };
 
-    ;
-
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; if false, it will not be shown.
+     */
     @Override //initialize the toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -207,6 +236,12 @@ public class SongDetail extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Called whenever an item in your options menu is selected.
+     * @param item The menu item that was selected.
+     * @return false to allow normal menu processing to proceed; true to consume it here.
+     */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {

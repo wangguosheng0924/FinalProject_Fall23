@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">FinalProject_Fall23</string>
     <string name="searchHint">eg. Taylor Swift </string>
+    <string name="library"> My Music Library </string>
+    <string name="artistName">  From artist: </string>
+    <string name="about">  about </string>
+    <string name="album">  From Album: </string>
+    <string name="duration">  Duration:</string>
+    <string name="collection">  From Collection:</string>
+    <string name="search">  Search</string>
+    <string name="welcome">  Welcome to Deezer song search!</string>
+    <string name="add">  Add</string>
+    <string name="myCollection">my collection lis </string>
+    <string name="play">Play </string>
+
+
+
 </resources>
