@@ -5,4 +5,6 @@
     <string name="search_button">搜索</string>
     <string name="save_button">保存</string>
     <string name="history_button">搜索历史</string>
+    <string name="help_message">点击“搜索”查看词语释义。点击“保存”讲查询结果储存在本地。点击“搜索历史”查看搜索记录。</string>
+    <string name="help_title">帮助</string>
 </resources>
