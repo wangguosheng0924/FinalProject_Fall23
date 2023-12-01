@@ -301,6 +301,17 @@ public class SongDetail extends AppCompatActivity {
             helpDialogBuilder.show();
 
             break;
+
+
+            case R.id.item_4:
+
+
+                Intent intent = new Intent(SongDetail.this, MainActivity.class);
+
+                startActivity(intent);
+
+
+                break;
         }
         return true;
     }

@@ -21,4 +21,14 @@
 
         android:icon="@drawable/helper"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/item_4"
+        android:title="main menu"
+
+
+
+
+       />
+
+
 </menu>

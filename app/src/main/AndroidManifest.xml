@@ -48,6 +48,11 @@
 
 
 
+        <activity
+            android:name=".SunriseMain"
+            android:exported="true">
+
+        </activity>
 
 
         <meta-data

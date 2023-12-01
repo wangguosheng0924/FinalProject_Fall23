@@ -14,4 +14,10 @@
 
       />
 
+    <item
+        android:id="@+id/item_3"
+        android:title="main menu"
+
+        />
+
 </menu>

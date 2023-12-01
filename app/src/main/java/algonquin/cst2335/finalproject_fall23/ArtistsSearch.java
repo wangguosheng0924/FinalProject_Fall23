@@ -340,6 +340,16 @@ public class ArtistsSearch extends AppCompatActivity {
                 helpDialogBuilder.show();
 
                 break;
+
+            case R.id.item_3:
+
+
+                Intent intent = new Intent(ArtistsSearch.this, MainActivity.class);
+
+                startActivity(intent);
+
+
+                break;
         }
         return true;
     }

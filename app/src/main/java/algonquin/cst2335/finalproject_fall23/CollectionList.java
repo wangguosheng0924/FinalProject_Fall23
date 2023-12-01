@@ -257,6 +257,16 @@ public class CollectionList extends AppCompatActivity {
                 helpDialogBuilder.show();
 
                 break;
+
+            case R.id.item_3:
+
+
+                Intent intent = new Intent(CollectionList.this, MainActivity.class);
+
+                startActivity(intent);
+
+
+                break;
         }
         return true;
     }
