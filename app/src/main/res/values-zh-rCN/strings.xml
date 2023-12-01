@@ -8,8 +8,20 @@
     <string name="duration">"  时长：:"</string>
     <string name="collection">来自收藏：</string>
     <string name="search">"  搜索"</string>
-    <string name="welcome">欢迎进入我的音乐引擎</string>
-    <string name="add">"  添加"</string>
+    <string name="welcome">欢迎进入Project_Fall23!</string>
+    <string name="add">" 添加"</string>
     <string name="myCollection">我的收藏夹</string>
     <string name="play">播放</string>
+    <string name="welcomeDee">  欢迎进入我的音乐引擎</string>
+
+    <string name="branch_sunrise">Sunrise Sunset lookup</string>
+    <string name="branch_recipe">查看菜谱</string>
+    <string name="branch_dictionary">搜索词典</string>
+    <string name="branch_song">搜歌</string>
+    <string name="enter_latitude">请输入经度：</string>
+    <string name="enter_longitude">请输入纬度</string>
+    <string name="lookup">查看</string>
+    <string name="back_home_page">回到主菜单</string>
+    <string name="save_favourite">保存最喜欢的地点</string>
+    <string name="view_favourite">查看最喜欢的地点</string>
 </resources>
