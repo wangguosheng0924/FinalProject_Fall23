@@ -1,5 +1,6 @@
 package algonquin.cst2335.finalproject_fall23;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,8 @@ public class HistoryFragment extends Fragment {
 
     DetailFragmentLayoutBinding bindingDetail;
 
+    HistoryClickListener historyClickListener;
+
     public HistoryFragment(ArrayList<String> savedWordList) {
         this.savedWordList = savedWordList;
     }
@@ -64,13 +67,17 @@ public class HistoryFragment extends Fragment {
 ////                saved_definition = item.getDefinition();
 ////            }
 
-            DetailFragment detailFragment = DetailFragment.newInstance(selectedWord);
-            // Replace the current layout with the HistoryFragment
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.detailFrameLayout, detailFragment)
-                    .addToBackStack(null)
-                    .commit();
-            Toast.makeText(getContext(), "Selected Word: " + selectedWord, Toast.LENGTH_SHORT).show();
+//            DetailFragment detailFragment = DetailFragment.newInstance(selectedWord);
+//            // Replace the current layout with the HistoryFragment
+//            getParentFragmentManager().beginTransaction()
+//                    .replace(R.id.detailFrameLayout, detailFragment)
+//                    .addToBackStack(null)
+//                    .commit();
+//            Toast.makeText(getContext(), "Selected Word: " + selectedWord, Toast.LENGTH_SHORT).show();
+
+            if (historyClickListener != null) {
+                historyClickListener.onHistoryClick(selectedWord);
+            }
         });
 
 //        // version 3: use recyclerview to contain the words
@@ -101,7 +108,22 @@ public class HistoryFragment extends Fragment {
 //        });// end of setAdapter
         return view;
     }
-//
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof HistoryClickListener) {
+            historyClickListener = (HistoryClickListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        historyClickListener = null;
+    }
+
+    //
 //    //myRowHolder
 //    class MyRowHolder extends RecyclerView.ViewHolder {
 //        TextView searched_term;
@@ -134,5 +156,11 @@ public class HistoryFragment extends Fragment {
 //            });
 //        }
 //    } // end of MyRowHolder
-    }// end of fragment class
+
+
+    public interface HistoryClickListener {
+        void onHistoryClick(String word);
+    }
+
+}// end of fragment class
 

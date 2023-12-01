@@ -1,10 +1,7 @@
 package algonquin.cst2335.finalproject_fall23;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,21 +25,13 @@ import androidx.room.Room;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,12 +41,9 @@ import java.util.concurrent.Executors;
 
 import algonquin.cst2335.finalproject_fall23.databinding.DictionaryactivityMainBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.PostsearchlayoutBinding;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
-public class DictionaryActivity extends AppCompatActivity {
+public class DictionaryActivity extends AppCompatActivity implements HistoryFragment.HistoryClickListener {
     DictionaryactivityMainBinding binding;
 
     PostsearchlayoutBinding binding1;
@@ -150,62 +136,43 @@ public class DictionaryActivity extends AppCompatActivity {
 
         //save button: should I put this definitions as <string> or <definition>?
         Button saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(clk->{
-            String word_to_save = binding1.searchedTerm.getText().toString();
-            String definitions_to_save= binding1.def1.getText().toString();
-            Definition word_definition_to_save = new Definition(word_to_save,definitions_to_save);
-            //insert word_definition_to_save to arraylist<definition>
-            definitionsLocal.add(word_definition_to_save);
-            myAdapter.notifyItemInserted(definitionsLocal.size()-1);
-            //insert word_definition_to_save to database
-            Executor thread = Executors.newSingleThreadExecutor();
-            thread.execute(()->{
-                mDAO.insertDefinition(word_definition_to_save);
-                Log.d("TAG","The word and definition saved is:" + word_definition_to_save);
-            });
-
-
+        saveButton.setOnClickListener(clk -> {
+            for (Definition definition : definitionsLocal) {
+                Executor thread = Executors.newSingleThreadExecutor();
+                thread.execute(() -> {
+                    mDAO.insertDefinition(definition);
+                    Log.d("TAG", "The word and definition saved is:" + definition);
+                });
+            }
         });
 
         //history button:
-         Button historyButton= findViewById(R.id.history_button);
-         historyButton.setOnClickListener(clk->{
-             String saved_word;
-             //ArrayList<String> saved_word_list = new ArrayList<>();
-             Set<String> saved_word_set = new HashSet<>();
+        Button historyButton = findViewById(R.id.history_button);
+        historyButton.setOnClickListener(clk -> {
+            String saved_word;
+            Set<String> saved_word_set = new HashSet<>();
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(() ->
+            {
+                for (Definition item : mDAO.getAllDefinitions()) {
+                    String word = item.getTerm();
+                    saved_word_set.add(word);
+                }
+                runOnUiThread(() -> {
+                    // Convert the Set to a List if necessary
+                    ArrayList<String> saved_word_list = new ArrayList<>(saved_word_set);
 
-             if(definitionsLocal == null)
-                 {
-                     definitionModel.definitionsLocal.setValue(definitionsLocal = new ArrayList<>());
+                    // Create a new instance of the HistoryFragment and pass the saved_word_list
+                    HistoryFragment historyFragment = new HistoryFragment(saved_word_list);
 
-                     Executor thread = Executors.newSingleThreadExecutor();
-                     thread.execute(() ->
-                     {
-                         definitionsLocal.addAll( mDAO.getAllDefinitions() ); //Once you get the data from database
-//                         runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
-                     });
-                 }
-             for (Definition item : definitionsLocal) {
-
-                 saved_word = item.getTerm();
-                 //saved_word_list.add(saved_word);
-                 saved_word_set.add(saved_word);
-
-            }
-             // Convert the Set to a List if necessary
-             ArrayList<String> saved_word_list = new ArrayList<>(saved_word_set);
-
-             // Create a new instance of the HistoryFragment and pass the saved_word_list
-             HistoryFragment historyFragment = new HistoryFragment(saved_word_list);
-
-             // Replace the current layout with the HistoryFragment
-             getSupportFragmentManager().beginTransaction()
-                     .replace(R.id.frameLayout, historyFragment)
-                     .addToBackStack(null)
-                     .commit();
-
-
-         });
+                    // Replace the current layout with the HistoryFragment
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, historyFragment)
+                            .addToBackStack(null)
+                            .commit();
+                });
+            });
+        });
         // set a Linear layout manager as the layout manager for the recycleView.
         // the items in the recyclerView can be arranged either vertical or horizontal.
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -264,6 +231,30 @@ public class DictionaryActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onHistoryClick(String word) {
+        Log.d("onHistoryClick", word);
+        showDefinitionFromDB(word);
+        hideHistoryFragment();
+    }
+
+    private void hideHistoryFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction().hide(fragment).commit();
+        }
+    }
+
+    private void showDefinitionFromDB(String word) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Definition> definitions = mDAO.searchDefinitions(word);
+            definitionsLocal.clear();
+            definitionsLocal.addAll(definitions);
+            runOnUiThread(() -> {
+                myAdapter.notifyDataSetChanged();
+            });
+        });
+    }
 
     //myRowHolder
     class MyRowHolder extends RecyclerView.ViewHolder {
