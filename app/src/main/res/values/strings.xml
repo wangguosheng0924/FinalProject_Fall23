@@ -1,8 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="search_button">Search</string>
     <string name="app_name">Final Project</string>
     <string name="dictionary_title">Dictionary</string>
     <string name="search_definition">Search Definition</string>
     <string name="save_button">Save</string>
     <string name="history_button">ViewHistory</string>
+    <string name="help_message" tools:ignore="StringEscaping">search a word to check the definition by clicking \'search\'.
+        save your searched work and its definitions to device by clicking \'save\'.
+        review your search history by click \'history\'</string>
+    <string name="help_title">Help</string>
 </resources>

@@ -1,6 +1,7 @@
 package algonquin.cst2335.finalproject_fall23;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -236,12 +237,20 @@ public class DictionaryActivity extends AppCompatActivity implements HistoryFrag
         {
             case R.id.item1:
                 AlertDialog.Builder builder = new AlertDialog.Builder( DictionaryActivity.this );
-                builder.setMessage("search a word to check the definition by clicking 'search'." +
-                        "\nsave your searched work and its definitions to device by clicking 'save'." +
-                        "\nreview your search history by click 'history'");
-                builder.setTitle("Help");
+                builder.setMessage(getString(R.string.help_message));
+                builder.setTitle(getString(R.string.help_title));
                 builder.create().show();
                 break;
+            case R.id.item2:
+                Snackbar.make(binding.myToolbar,"You will go back to Homepage",Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+
+
+
+
+
         }
         return true;
     }
