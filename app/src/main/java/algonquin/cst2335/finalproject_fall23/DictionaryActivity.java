@@ -53,6 +53,7 @@ public class DictionaryActivity extends AppCompatActivity implements HistoryFrag
     RecyclerView.Adapter myAdapter;
 
     protected RequestQueue queue = null;
+    private boolean saveOrDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,10 @@ public class DictionaryActivity extends AppCompatActivity implements HistoryFrag
         //search button:
         Button searchButton = findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> {
+
+            hideHistoryFragment();
+            setButtonSaveOrDelete(true);
+
             String searchTerm = binding.editText.getText().toString();
 
             // save the last searched term
@@ -92,7 +97,7 @@ public class DictionaryActivity extends AppCompatActivity implements HistoryFrag
             editor.putString("searchTerm", searchTerm);
             editor.apply();
 
-            myAdapter.notifyItemInserted(definitionsLocal.size() - 1);
+            //myAdapter.notifyItemInserted(definitionsLocal.size() - 1);
 
             // use volley to retrieve data form the server
             String stringURL = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
@@ -137,12 +142,22 @@ public class DictionaryActivity extends AppCompatActivity implements HistoryFrag
         //save button: should I put this definitions as <string> or <definition>?
         Button saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener(clk -> {
-            for (Definition definition : definitionsLocal) {
-                Executor thread = Executors.newSingleThreadExecutor();
-                thread.execute(() -> {
-                    mDAO.insertDefinition(definition);
-                    Log.d("TAG", "The word and definition saved is:" + definition);
-                });
+            if (saveOrDelete) {
+                for (Definition definition : definitionsLocal) {
+                    Executor thread = Executors.newSingleThreadExecutor();
+                    thread.execute(() -> {
+                        mDAO.insertDefinition(definition);
+                        Log.d("TAG", "The word and definition saved is:" + definition);
+                    });
+                }
+                Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+            } else {
+                for (Definition definition : definitionsLocal) {
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        mDAO.deleteDefinition(definition);
+                    });
+                }
+                Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -235,7 +250,13 @@ public class DictionaryActivity extends AppCompatActivity implements HistoryFrag
     public void onHistoryClick(String word) {
         Log.d("onHistoryClick", word);
         showDefinitionFromDB(word);
+        setButtonSaveOrDelete(false);
         hideHistoryFragment();
+    }
+
+    private void setButtonSaveOrDelete(boolean saveOrDelete) {
+        this.saveOrDelete = saveOrDelete;
+        ((Button) findViewById(R.id.save_button)).setText(saveOrDelete ? "Save" : "Delete");
     }
 
     private void hideHistoryFragment() {
