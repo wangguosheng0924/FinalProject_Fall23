@@ -27,15 +27,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.recipeButton.setOnClickListener(click -> {
-            startActivity(new Intent(this, RecipeMain.class));
+            startActivity(new Intent(this, RecipeSearch.class));
         });
 
         binding.songButton.setOnClickListener(click -> {
             startActivity(new Intent(this, ArtistsSearch.class));
-        });
-
-        binding.recipeButton.setOnClickListener(click -> {
-            startActivity(new Intent(this, RecipeMain.class));
         });
 
     }

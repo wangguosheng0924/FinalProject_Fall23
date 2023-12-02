@@ -27,9 +27,15 @@
             android:name=".RecipeMain"
             android:exported="false" />
         <activity
+            android:name=".RecipeSearch"
+            android:exported="false" />
+
+        <activity
             android:name=".ArtistsSearch"
-            android:exported="false">
-        </activity>
+            android:exported="false"/>
+
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
