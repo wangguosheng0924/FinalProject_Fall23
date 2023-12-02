@@ -4,21 +4,20 @@
 
     <!-- Text color. -->
     <item
-        android:id="@+id/saveRecipe"
-        android:title="save Recipe"
-        android:icon="@drawable/save"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/homePage"
+        android:id="@+id/homeMenu"
         android:title="Home Page"
         app:showAsAction="never" />
     <item
-        android:id="@+id/mainPage"
-        android:title="main Page"
+        android:id="@+id/savedRecipeMenu"
+        android:title="Favorite Recipes"
         app:showAsAction="never" />
     <item
-        android:id="@+id/help"
+        android:id="@+id/aboutRecipeMenu"
         android:title="Help"
         app:showAsAction="never" />
-
+    <item
+        android:id="@+id/saveTheRecipe"
+        android:title="Save The Recipe"
+        android:icon="@drawable/save"
+        app:showAsAction="always" />
 </menu>

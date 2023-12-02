@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Text color. -->
     <TextView
         android:id="@+id/recipeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Recipe title goes here"
         android:textSize="30dp"
-        android:text="Recipe Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

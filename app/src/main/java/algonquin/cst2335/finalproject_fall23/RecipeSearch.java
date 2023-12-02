@@ -1,16 +1,15 @@
 package algonquin.cst2335.finalproject_fall23;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,111 +46,102 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import algonquin.cst2335.finalproject_fall23.data.RecipeViewModel;
-import algonquin.cst2335.finalproject_fall23.databinding.RecipeDetailsBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.RecipeSearchBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.RecipeTitleBinding;
 
 public class RecipeSearch extends AppCompatActivity {
-    RecipeSearchBinding binding;
+    private RecipeSearchBinding binding;
     RequestQueue queue = null;
-    Recipe recipefromAPI;
-    RecyclerView.Adapter myAdapter;
+    private RecyclerView.Adapter myAdapter;
+    String recipe;
+    String url;
     ArrayList<Recipe> recipeList = null;
     RecipeDAO rDAO;
-    RecipeViewModel recipeModel ;
+    RecipeViewModel recipeModel;
     Intent homePage;
-    Intent mainPage;
-    String searchRecipe;
-    String url;
+    Intent favoriteRecipePage;
+    Recipe recipefromAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = RecipeSearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.myToolbar);
+        setSupportActionBar( binding.recipeToolBar);
 
         recipeModel = new ViewModelProvider(this).get(RecipeViewModel.class);
-        RecipeDatabase db = Room.databaseBuilder(getApplicationContext(), RecipeDatabase.class, "recipe-SQL").build();
+        RecipeDatabase db = Room.databaseBuilder(getApplicationContext(), RecipeDatabase.class, "database-recipe").build();
         rDAO = db.rDAO();
 
-        homePage = new Intent(RecipeSearch.this, MainActivity.class);
-        mainPage = new Intent(RecipeSearch.this, RecipeMain.class);
+        homePage = new Intent( RecipeSearch.this, MainActivity.class);
+        favoriteRecipePage = new Intent( RecipeSearch.this, RecipeMain.class);
 
         queue = Volley.newRequestQueue(this);
 
+        //get data from Database
         recipeList = recipeModel.recipeList.getValue();
         recipeModel.recipeList.setValue(recipeList = new ArrayList<>());
 
-//        if (recipeList == null) {
-//            recipeModel.recipeList.setValue(recipeList = new ArrayList<>());
-//
-//            Executor thread = Executors.newSingleThreadExecutor();
-//            thread.execute(() ->
-//            {
-//                recipeList.addAll(rDAO.getAllRecipes()); //Once you get the data from database
-//
-//                runOnUiThread(() -> binding.recyclerViewResults.setAdapter(myAdapter)); //You can then load the RecyclerView
-//            });
-//        }
-
         SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        AtomicReference<EditText> searchText = new AtomicReference<>(binding.editTextRecipe);
-        Button searchButton = binding.buttonSearch;
+        AtomicReference<EditText> searchText = new AtomicReference<>(binding.recipeTextView);
 
-
-        searchButton.setOnClickListener(clk->
+        binding.recipeSearchButton.setOnClickListener(clk->
         {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("searchText", searchText.get().getText().toString() );
             editor.apply();
-
-            Toast.makeText(this,"Searching...", Toast.LENGTH_SHORT).show();
-
+            CharSequence text = "Searching...";
+            Toast.makeText(this,text, Toast.LENGTH_SHORT).show();
+            recipe = binding.recipeTextView.getText().toString();
 
             try {
-                String searchRecipe = URLEncoder.encode(binding.editTextRecipe.getText().toString(),"UTF-8");
-                String url = "https://api.spoonacular.com/recipes/complexSearch?query="
-                        + searchRecipe +"&apiKey=00939092e09741dd98d285edda1fc2ec";
+                url = "https://api.spoonacular.com/recipes/complexSearch?query="
+                        + URLEncoder.encode(recipe, "UTF-8")
+                        +"&apiKey=00939092e09741dd98d285edda1fc2ec";
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-
                     (response) -> {
                         try {
                             JSONArray resultsArray= response.getJSONArray("results");
                             recipeModel.recipeList.setValue(recipeList = new ArrayList<>());
 
                             for(int i=0;i<resultsArray.length();i++){
-                                JSONObject position0 = resultsArray.getJSONObject(i);
-                                int id=position0.getInt("id");
-                                String title = position0.getString("title");
-                                String image = position0.getString("image");
-
+                                JSONObject thisObject = resultsArray.getJSONObject(i);
+                                int id=thisObject.getInt("id");
+                                String title = thisObject.getString("title");
+                                String image = thisObject.getString("image");
 
                                 recipefromAPI= new Recipe(title,image,id);
                                 recipeList.add(recipefromAPI);
                                 myAdapter.notifyDataSetChanged();
+
                                 String pathname = getFilesDir() + "/" + id + ".jpg";
                                 File file = new File(pathname);
                                 if (file.exists()) {
-
                                 } else {
-                                    ImageRequest imgReq = new ImageRequest(image, new Response.Listener<Bitmap>() {
+                                    ImageRequest imageRequest = new ImageRequest(image, new Response.Listener<Bitmap>() {
                                         @Override
                                         public void onResponse(Bitmap bitmap) {
                                             // Do something with loaded bitmap...
 
-                                            try { bitmap.compress(Bitmap.CompressFormat.PNG, 100, RecipeSearch.this.openFileOutput(id + ".png", Activity.MODE_PRIVATE));
+                                            try {
+
+                                                Log.e("ImageRequest", " loading image: " + bitmap);
+                                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, RecipeSearch.this.openFileOutput(id + ".png", Activity.MODE_PRIVATE));
                                             } catch (Exception e) {
 
                                             }
+                                            Log.e("ImageRequest", " loading image: " + image);
 
                                         }
                                     }, 1024, 1024, ImageView.ScaleType.CENTER, null, (error) -> {
+                                        Log.e("ImageRequest", "Error loading image: ");
                                     });
-                                    queue.add(imgReq);
+                                    queue.add(imageRequest);
                                 }
                             }
 
@@ -163,39 +153,31 @@ public class RecipeSearch extends AppCompatActivity {
                     });
             queue.add(request);
 
-        } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }});
-
-
-
-        searchText.get().setText(prefs.getString("searchText",""));
-        recipeModel.selectedRecipe.observe(this, (newValue) -> {
-            RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment(newValue);
-            FragmentManager fMgr = getSupportFragmentManager();
-            FragmentTransaction tx = fMgr.beginTransaction();
-
-            tx.replace(R.id.fragmentLocation, recipeDetailsFragment);
-            tx.commit();
         });
+        searchText.get().setText(prefs.getString("searchText",""));
 
-        // Set up RecyclerView and Adapter
-        binding.recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerViewResults.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
+//        recipeModel.selectedRecipe.observe(this, (newMessageValue) -> {
+//            RecipeDetailsFragment chatFragment = new RecipeDetailsFragment( newMessageValue );
+//            FragmentManager fMgr = getSupportFragmentManager();
+//            FragmentTransaction tx = fMgr.beginTransaction();
+//            tx.addToBackStack("");
+//            tx.replace(R.id.recipeFragmentLocation,chatFragment);
+//            tx.commit();
+//        });
+
+        binding.recipeRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recipeRecycleView.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
             @NonNull
             @Override
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 RecipeTitleBinding binding = RecipeTitleBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
+                return new MyRowHolder( binding.getRoot() );
             }
 
             @Override
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
                 holder.recipeTitle.setText(recipeList.get(position).getTitle());
-                String obj = recipeList.get(position).getTitle();
-                holder.recipeTitle.setText(obj);
             }
-
 
             @Override
             public int getItemCount() {
@@ -203,8 +185,8 @@ public class RecipeSearch extends AppCompatActivity {
             }
         });
 
-    }
 
+    }
     class MyRowHolder extends RecyclerView.ViewHolder {
         TextView recipeTitle;
         public MyRowHolder(@NonNull View itemView) {
@@ -220,7 +202,6 @@ public class RecipeSearch extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -230,39 +211,36 @@ public class RecipeSearch extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
+            if (itemId == R.id.homeMenu){
+                CharSequence text = "Back to home page...";
+                Toast.makeText(this,text, Toast.LENGTH_SHORT).show();
+                startActivity( homePage);
 
-        if (itemId == R.id.homePage) {
-            Toast.makeText(this, "Back to home page", Toast.LENGTH_SHORT).show();
-            startActivity(homePage);
+            } else if(itemId == R.id.savedRecipeMenu ){
+                CharSequence text2 = "Go to favorite recipe page...";
+                Toast.makeText(this,text2, Toast.LENGTH_SHORT).show();
+                startActivity(favoriteRecipePage);
+
+            } else if (itemId == R.id.aboutRecipeMenu){
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+                builder2.setMessage("Enter the recipe name you want to search, you will get it by clicking on the search button, and you can save the favorite recipe by clicking on it then click the save icon on the toolbar.").setTitle("Instruction: ")
+                        .setNegativeButton("OK", (dialog, cl) -> {
+                        }).create().show();
+
+            } else if (itemId == R.id.saveTheRecipe) {
+                Recipe addRecipe = recipeModel.selectedRecipe.getValue();
+                recipeList.add(addRecipe);
+                myAdapter.notifyDataSetChanged();
+                Executor thread2 = Executors.newSingleThreadExecutor();
+                thread2.execute(( ) -> {
+                    //this is on a background thread
+                    addRecipe.id = (int)rDAO.insertRecipe(addRecipe); //get the ID from the database
+                    }); //the body of run()
+                Snackbar.make(this.findViewById(R.id.recipeTextView),"You added the recipe "
+                        +addRecipe.getTitle(),Snackbar.LENGTH_LONG).show();
+                getSupportFragmentManager() .popBackStack();
+
         }
-
-        if (itemId == R.id.mainPage) {
-            Toast.makeText(this, "Go to main page", Toast.LENGTH_SHORT).show();
-            startActivity(mainPage);
-        }
-
-        if (itemId == R.id.help) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("This recipe search application is created by Jingyi Zhou.").setTitle("About: ")
-                    .setNegativeButton("OK", (dialog, cl) -> {
-                    }).create().show();
-        }
-
-        if (itemId == R.id.saveRecipe) {
-
-            Recipe addRecipe = recipeModel.selectedRecipe.getValue();
-            recipeList.add(addRecipe);
-            myAdapter.notifyDataSetChanged();
-            Executor thread2 = Executors.newSingleThreadExecutor();
-            thread2.execute(() -> {
-                //this is on a background thread
-                addRecipe.id = (int) rDAO.insertRecipe(addRecipe); //get the ID from the database
-            }); //the body of run()
-            Snackbar.make(this.findViewById(R.id.editTextRecipe), "You added the recipe "
-                    + addRecipe.getTitle(), Snackbar.LENGTH_LONG).show();
-            getSupportFragmentManager().popBackStack();
-                }
-
         return true;
     }
 }

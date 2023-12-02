@@ -1,7 +1,6 @@
-package algonquin.cst2335.finalproject_fall23;
-
-import android.graphics.Bitmap;
+package algonquin.cst2335.finalproject_fall23;import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,43 +21,48 @@ import org.json.JSONException;
 
 import algonquin.cst2335.finalproject_fall23.databinding.RecipeDetailsBinding;
 
+
 public class RecipeDetailsFragment extends Fragment {
     Recipe selected;
-
-    public RecipeDetailsFragment(Recipe recipe) {
-        selected = recipe;
+    public  RecipeDetailsFragment(Recipe recipe){
+        selected =recipe;
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater,container,savedInstanceState);
 
         RecipeDetailsBinding binding = RecipeDetailsBinding.inflate(inflater);
-        binding.recipeTitle.setText(selected.getTitle());
+        binding.recipeDetailsTitle.setText(selected.getTitle());
 
-        String iconUrl=selected.getImage();
-
+        String imageUrl=selected.getImage();
         RequestQueue queue = null;
         queue = Volley.newRequestQueue(getActivity());
-        ImageRequest imgReq = new ImageRequest(iconUrl, new Response.Listener<Bitmap>() {
+        ImageRequest imgReq2 = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap bitmap) {
-                try {
-                    binding.recipeImage.setImageBitmap(bitmap);
-                } catch (Exception e) {
-                }
-            }
-        },1024, 1024, ImageView.ScaleType.CENTER, null, (error) -> {});
+                // Do something with loaded bitmap...
 
+                try {
+                    binding.recipeDetailsImage.setImageBitmap(bitmap);
+                    Log.e("ImageRequest", " loading image: " + imageUrl);
+                } catch (Exception e) {
+
+                }
+
+            }
+        }, 1024, 1024, ImageView.ScaleType.CENTER, null, (error) -> {
+            Log.e("ImageRequest", "Error loading image: " + error.getMessage());
+        });
         String stringURL="https://api.spoonacular.com/recipes/"
-                +selected.getApiId()
+                +selected.getWebsiteID()
                 +"/information?apiKey=00939092e09741dd98d285edda1fc2ec";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
                 (response) -> {
                     try {
                         String summary=response.getString("summary");
-                          binding.recipeSummary.setText(summary);
+                        Log.d("WeatherResponse", "summary: " + summary);
+                        binding.recipeDetailsSummary.setText(summary);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -66,7 +70,7 @@ public class RecipeDetailsFragment extends Fragment {
                 (error) -> {
                 });
         queue.add(request);
-        queue.add(imgReq);
+        queue.add(imgReq2);
 
         return binding.getRoot();
     }
