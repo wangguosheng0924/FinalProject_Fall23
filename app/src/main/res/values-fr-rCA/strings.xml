@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lever du soleil</string>
+    <string name="app_name"></string>
     <string name="welcome">Bienvenue dans Final Project_Fall23 !</string>
     <string name="branch_sunrise">Recherche du lever du soleil et du coucher du soleil</string>
     <string name="branch_recipe">Recherche de recettes</string>
