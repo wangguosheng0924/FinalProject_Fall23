@@ -1,6 +1,36 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">FinalProject_Fall23</string>
+    <string name="searchHint">eg. Taylor Swift </string>
+    <string name="library"> My Music Library </string>
+    <string name="artistName">  From artist: </string>
+    <string name="about">  about </string>
+    <string name="album">  From Album: </string>
+    <string name="duration">  Duration:</string>
+    <string name="collection">  From Collection:</string>
+    <string name="search">  Search</string>
+    <string name="welcomeDee">  Welcome to Deezer song search!</string>
+    <string name="add">  Add</string>
+    <string name="myCollection">my collection lis </string>
+    <string name="play">Play </string>
+
+
+
+
+
+
+    <string name="welcome">Welcome to Final Project_Fall23!</string>
+    <string name="branch_sunrise">Sunrise Sunset lookup</string>
+    <string name="branch_recipe">Recipe search</string>
+    <string name="branch_dictionary">Dictionary search</string>
+    <string name="branch_song">Song search</string>
+    <string name="enter_latitude">Please enter Latitude :</string>
+    <string name="enter_longitude">Please enter Longitude : </string>
+    <string name="lookup">lookup</string>
+    <string name="back_home_page">Back to Home Page</string>
+    <string name="save_favourite">Save as favourite location</string>
+    <string name="view_favourite">View favourite location</string>
+
     <string name="search_button">Search</string>
-    <string name="app_name">Final Project</string>
     <string name="dictionary_title">Dictionary</string>
     <string name="search_definition">Search Definition</string>
     <string name="save_button">Save</string>

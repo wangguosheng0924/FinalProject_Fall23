@@ -22,11 +22,29 @@ import algonquin.cst2335.finalproject_fall23.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inflate the layout for this view and set it as the content view
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.dictionaryButton.setOnClickListener(click -> {
+            startActivity(new Intent(this, DictionaryActivity.class));
+        });
+
+        binding.sunriseButton.setOnClickListener(click -> {
+            startActivity(new Intent(this, SunriseMain.class));
+        });
+
+        binding.recipeButton.setOnClickListener(click -> {
+            startActivity(new Intent(this, RecipeSearch.class));
+        });
+
+        binding.songButton.setOnClickListener(click -> {
+            startActivity(new Intent(this, ArtistsSearch.class));
+        });
 
         //initialize the toolbar.Android will call onCreateOptionsMenu().
         setSupportActionBar(binding.mainToolbar);

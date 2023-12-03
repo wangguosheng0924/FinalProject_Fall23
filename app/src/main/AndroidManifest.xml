@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -15,8 +16,26 @@
         android:theme="@style/Theme.FinalProject_Fall23"
         tools:targetApi="31">
         <activity
-            android:name=".HistoryActivity"
+            android:name=".CollectionList"
             android:exported="false" />
+        <activity
+            android:name=".SongDetail"
+
+            android:exported="false" />
+        <activity
+
+            android:name=".RecipeMain"
+            android:exported="false" />
+        <activity
+            android:name=".RecipeSearch"
+            android:exported="false" />
+
+        <activity
+            android:name=".ArtistsSearch"
+            android:exported="false"/>
+
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -26,17 +45,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".DictionaryActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+        <activity
+            android:name=".SunriseMain"
+            android:exported="true">
+
+        </activity>
+
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+
     </application>
 
 </manifest>

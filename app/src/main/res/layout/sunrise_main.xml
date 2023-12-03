@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SunriseMain">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewResults"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextLatitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar" />
+
+    <TextView
+        android:id="@+id/textViewLatitude"
+        android:layout_width="158dp"
+        android:layout_height="43dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="24dp"
+        android:text="@string/enter_latitude"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewLongitude"
+        app:layout_constraintStart_toStartOf="@+id/textViewLongitude" />
+
+    <EditText
+        android:id="@+id/editTextLatitude"
+        android:layout_width="137dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="-5dp"
+        android:hint=""
+        app:layout_constraintStart_toEndOf="@+id/textViewLatitude"
+        app:layout_constraintTop_toTopOf="@+id/textViewLatitude" />
+
+    <TextView
+        android:id="@+id/textViewLongitude"
+        android:layout_width="171dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="24dp"
+        android:text="@string/enter_longitude"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSaveAsFavouriteLocation"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextLongitude"
+        android:layout_width="139dp"
+        android:layout_height="44dp"
+        android:layout_below="@id/editTextLatitude"
+        android:layout_marginTop="-5dp"
+        android:hint=""
+        app:layout_constraintStart_toEndOf="@+id/textViewLongitude"
+        app:layout_constraintTop_toTopOf="@+id/textViewLongitude" />
+
+    <Button
+        android:id="@+id/buttonLookup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLongitude"
+        android:text="@string/lookup"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextLongitude"
+        app:layout_constraintStart_toEndOf="@+id/editTextLongitude" />
+
+    <Button
+        android:id="@+id/buttonSaveAsFavouriteLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
+        android:text="@string/save_favourite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonViewFavouriteLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_favourite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonSaveAsFavouriteLocation" />
+
+    <FrameLayout
+        android:id="@+id/fragmentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/myToolbar"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
