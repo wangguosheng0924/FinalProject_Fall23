@@ -2,7 +2,7 @@ package algonquin.cst2335.finalproject_fall23;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import android.app.AlertDialog;
@@ -17,8 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageRequest;
@@ -28,13 +26,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.zip.Inflater;
 
 import algonquin.cst2335.finalproject_fall23.databinding.ActivitySongDetailBinding;
 /**
@@ -54,6 +49,9 @@ public class SongDetail extends AppCompatActivity {
 
     /** Collection of songs. */
     ArrayList<SongList> songCollect;
+
+    /** ViewModel for managing song data. */
+    SongViewModel songModel;
 
     /** View Binding for this activity. */
     ActivitySongDetailBinding binding;
@@ -76,7 +74,10 @@ public class SongDetail extends AppCompatActivity {
         setSupportActionBar(binding.myToolbar);
 
         queue = Volley.newRequestQueue(this);
-        songCollect = new ArrayList<>();
+
+        songModel = new ViewModelProvider(this).get(SongViewModel.class);
+
+        songCollect = songModel.artistSongs;
 
         //load messages from the database:
         PersonalSongListData db = Room.databaseBuilder(getApplicationContext(),
@@ -114,9 +115,9 @@ public class SongDetail extends AppCompatActivity {
                                 binding.albumCover.setImageBitmap(bitmap);
 
 
-                                FileOutputStream fOut = null;
+
                                 try {
-                                    fOut =
+                                    FileOutputStream fOut =
                                             openFileOutput(imageFilePath + ".jpg", Context.MODE_PRIVATE);
 
                                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
@@ -220,7 +221,7 @@ public class SongDetail extends AppCompatActivity {
             mediaPlayer = null;
         }
         //play song
-    };
+    }
 
     /**
      * Initialize the contents of the Activity's standard options menu.
