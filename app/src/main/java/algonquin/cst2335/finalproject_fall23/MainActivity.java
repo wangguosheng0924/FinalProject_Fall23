@@ -7,6 +7,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import algonquin.cst2335.finalproject_fall23.databinding.ActivityMainBinding;
 import android.view.Menu;
@@ -80,5 +89,36 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ArtistsSearch.class));
         });
 
+        //initialize the toolbar.Android will call onCreateOptionsMenu().
+        setSupportActionBar(binding.mainToolbar);
+
+    }
+    @Override //this initialized the toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override // this defines when users select a menuItem
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch( item.getItemId() )
+        {
+            case R.id.item_dictionary:
+                Snackbar.make(binding.mainToolbar,"You will go to the dictionary",Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(this, DictionaryActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.item_about:
+                Toast.makeText(this, "created by Christy", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+
+    public void onDictionaryButtonClick(View view){
+        Intent intent = new Intent(this, DictionaryActivity.class);
+        startActivity(intent);
     }
 }

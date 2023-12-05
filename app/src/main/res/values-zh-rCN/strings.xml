@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">FinalProject_Fall23</string>
     <string name="searchHint">eg. Taylor Swift </string>
     <string name="library">"我的音乐收藏夹 "</string>
     <string name="artistName">歌手：</string>
@@ -24,13 +23,11 @@
     <string name="back_home_page">回到主菜单</string>
     <string name="save_favourite">保存最喜欢的地点</string>
     <string name="view_favourite">查看最喜欢的地点</string>
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
     <string name="app_name">期末设计</string>
     <string name="dictionary_title">字典</string>
     <string name="search_definition">搜索定义</string>
     <string name="search_button">搜索</string>
     <string name="save_button">保存</string>
     <string name="history_button">搜索历史</string>
->>>>>>> 873de9a (milestone2.2 finished language support)
+    <string name="help_message">点击“搜索”查看词语释义。点击“保存”讲查询结果储存在本地。点击“搜索历史”查看搜索记录。</string>
 </resources>
