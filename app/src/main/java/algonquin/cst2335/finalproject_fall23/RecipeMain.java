@@ -30,16 +30,45 @@ import algonquin.cst2335.finalproject_fall23.data.RecipeViewModel;
 import algonquin.cst2335.finalproject_fall23.databinding.RecipeMainBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.RecipeTitleBinding;
 
+
+/**
+ * RecipeMain is an activity class that displays a list of recipes and allows users to interact with them.
+ * It enables users to view recipe details, delete recipes, and navigate to other recipe-related activities.
+ * @autho Jingyi Zhou
+ */
 public class RecipeMain extends AppCompatActivity {
+
+    /** Binding instance for the activity. */
     private RecipeMainBinding binding;
+
+    /** Volley RequestQueue for network requests. */
     RequestQueue queue = null;
+
+    /** Adapter for the RecyclerView displaying recipes. */
     private RecyclerView.Adapter myAdapter;
+
+    /** ArrayList to store a list of recipes. */
     ArrayList<Recipe> recipeList = null;
+
+    /** DAO for accessing recipe data in the database. */
     RecipeDAO rDAO;
+
+    /** ViewModel for managing recipe data. */
     RecipeViewModel recipeModel;
+
+    /** Intent for navigating to the home page. */
     Intent homePage;
+
+    /** Intent for navigating to the recipe search page. */
     Intent searchPage;
 
+
+    /**
+     * Called when the activity is starting.
+     * Initializes the user interface and sets up interactions with recipe list and database.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +132,9 @@ public class RecipeMain extends AppCompatActivity {
         });
 
     }
-
+    /**
+     * ViewHolder class for RecyclerView items.
+     */
 
     class MyRowHolder extends RecyclerView.ViewHolder {
         TextView recipeTitle;
@@ -120,12 +151,25 @@ public class RecipeMain extends AppCompatActivity {
             });
         }
     }
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; if false, it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.recipe_main_menu, menu);
         return true;
     }
+
+    /**
+     * Called whenever an item in the options menu is selected.
+     * Handles navigation and interaction with menu items.
+     * @param item The menu item that was selected.
+     * @return true to consume the menu selection here; false to allow normal menu processing to proceed.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();

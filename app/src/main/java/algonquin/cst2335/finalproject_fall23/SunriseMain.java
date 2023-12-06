@@ -41,17 +41,40 @@ import algonquin.cst2335.finalproject_fall23.data.LocationViewModel;
 import algonquin.cst2335.finalproject_fall23.databinding.SunriseMainBinding;
 import algonquin.cst2335.finalproject_fall23.databinding.SunriseLocationBinding;
 
+/**
+ * SunriseMain is an activity class that displays sunrise and sunset information for a specific location.
+ * It allows users to search for location data, view details of selected locations, and manage their favorite locations.
+ * @author Guosheng Wang
+ */
 public class SunriseMain extends AppCompatActivity {
 
-    SunriseMainBinding binding;
+    /** Binding instance for the activity. */
+    private SunriseMainBinding binding;
+
+    /** DAO for accessing location data in the database. */
     LocationDAO lDAO;
+
+    /** The currently selected location. */
     Location selectedLocation;
+
+    /** ViewModel for managing location data. */
     LocationViewModel locationModel;
+
+    /** ArrayList to store a list of locations. */
     ArrayList<Location> theLocation = null;
+
+    /** Adapter for the RecyclerView displaying locations. */
     RecyclerView.Adapter myAdapter = null;
+
+    /** Volley RequestQueue for network requests. */
     RequestQueue queue = null;
 
-
+    /**
+     * Called when the activity is starting.
+     * Initializes the user interface and sets up interactions with the location list and API requests.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,7 +185,7 @@ public class SunriseMain extends AppCompatActivity {
                             Log.d("API_RESPONSE", response.toString());
 
                             //locationModel.selectedLocation.observe(this,(selectedLocation)-> {
-                                ;
+
                                 // Create a new fragment for message details
                                 SunriseDetailsFragment sunriseDetailsFragment = new SunriseDetailsFragment(timeSunrise, timeSunset, timeFirstLight, timeLastLight,
                                         timeDawn, timeDusk, timeSolarNoon, timeGoldenHour, dayLength);
@@ -257,8 +280,11 @@ public class SunriseMain extends AppCompatActivity {
 //            finish();
 //        });
 
-    }
-    // Override method for creating the options menu
+    }/**
+     * Initialize the contents of the Activity's standard options menu.
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; if false, it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -266,6 +292,13 @@ public class SunriseMain extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.sunrise_menu, menu);
         return true;
     }
+
+    /**
+     * Called whenever an item in the options menu is selected.
+     * Handles navigation and interaction with menu items.
+     * @param item The menu item that was selected.
+     * @return true to consume the menu selection here; false to allow normal menu processing to proceed.
+     */
     @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 

@@ -45,12 +45,19 @@ import algonquin.cst2335.finalproject_fall23.databinding.ActivityMainBinding;
  * This class implements the HistoryFragment.HistoryClickListener interface to handle clicks
  * on items in the search history.
  *
- * @author Christy Guan
+ * @author Christy Guan,Lei Luo, Jingyi Zhou,Guosheng Wang
  * @version 1.0
  */
 public class MainActivity extends AppCompatActivity {
-
+    /** Binding instance for ActivityMain. */
     ActivityMainBinding binding;
+
+    /**
+     * Called when the activity is starting.
+     * Initializes the user interface and sets up click listeners for navigating to different features of the app.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,24 +88,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.
+     * This method inflates the menu resource into the provided Menu object.
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; if false, it will not be shown.
+     */
 
-//    public void onDictionaryButtonClick(View view){
-//        Intent intent = new Intent(this, DictionaryActivity.class);
-//        startActivity(intent);
-//        binding.songButton.setOnClickListener(click -> {
-//            startActivity(new Intent(this, ArtistsSearch.class));
-//        });
-//
-//        //initialize the toolbar.Android will call onCreateOptionsMenu().
-//        setSupportActionBar(binding.mainToolbar);
-//    }
-//
+
     @Override //this initialized the toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Called whenever an item in the options menu is selected.
+     * This method handles user interaction with the menu items.
+     * @param item The menu item that was selected.
+     * @return true to consume the menu selection here; false to allow normal menu processing to proceed.
+     */
     @Override // this defines when users select a menuItem
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -117,8 +126,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    public void onDictionaryButtonClick(View view){
-//        Intent intent = new Intent(this, DictionaryActivity.class);
-//        startActivity(intent);
-//    }
+
 }
