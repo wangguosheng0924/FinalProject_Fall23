@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
+// the variables declared depend on the data extracted form the url. continued to be changed.
 public class Definition {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="id")
@@ -18,8 +19,7 @@ public class Definition {
 
     public Definition(){}
 
-    Definition(int id,String term,String definition){
-        this.id=id;
+    Definition(String term,String definition){
         this.term=term;
         this.definition=definition;
     }

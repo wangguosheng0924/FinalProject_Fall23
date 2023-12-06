@@ -24,7 +24,6 @@
             android:exported="false" />
         <activity
             android:name=".SongDetail"
-
             android:exported="false" />
         <activity
 
@@ -43,8 +42,9 @@
             android:name=".ArtistsSearch"
             android:exported="false"/>
 
-
-
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -58,23 +58,17 @@
         <activity
             android:name=".DictionaryActivity"
             android:exported="true">
-
         </activity>
-
-
 
         <activity
             android:name=".SunriseMain"
             android:exported="true">
-
         </activity>
 
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-
     </application>
 
 </manifest>

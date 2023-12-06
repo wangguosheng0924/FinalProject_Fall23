@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">FinalProject_Fall23</string>
     <string name="searchHint">eg. Taylor Swift </string>
     <string name="library"> My Music Library </string>
@@ -16,6 +16,8 @@
 
 
 
+
+
     <string name="welcome">Welcome to Final Project_Fall23!</string>
     <string name="branch_sunrise">Sunrise Sunset lookup</string>
     <string name="branch_recipe">Recipe search</string>
@@ -27,4 +29,14 @@
     <string name="back_home_page">Back to Home Page</string>
     <string name="save_favourite">Save as favourite location</string>
     <string name="view_favourite">View favourite location</string>
+
+    <string name="search_button">Search</string>
+    <string name="dictionary_title">Dictionary</string>
+    <string name="search_definition">Search Definition</string>
+    <string name="save_button">Save</string>
+    <string name="history_button">ViewHistory</string>
+    <string name="help_message" tools:ignore="StringEscaping">search a word to check the definition by clicking \'search\'.
+        save your searched work and its definitions to device by clicking \'save\'.
+        review your search history by click \'history\'</string>
+    <string name="help_title">Help</string>
 </resources>
